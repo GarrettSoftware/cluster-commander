@@ -1,0 +1,6 @@
+# This file contains aliases for groups of nodes
+# Format: alias_name  nodes
+
+# Example
+node  node[001-128]
+gpu   gpu[01-25]

@@ -1,0 +1,4 @@
+#!/bin/bash
+# Need to set the path to python3 and copy this file to include.sh
+
+PYTHON3=/net/sw/us/wi/anaconda/2023.09/bin/python3

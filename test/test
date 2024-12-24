@@ -1,0 +1,11 @@
+#!/bin/bash
+
+export HPC_TOOLS_PATH=$(dirname $(dirname $(realpath $0) ) )
+export PYTHONPATH=$PYTHONPATH:$HPC_TOOLS_PATH/src
+export PATH=$HPC_TOOLS_PATH/bin:$PATH
+source $HPC_TOOLS_PATH/etc/include.sh
+
+if [[ $1 == "big" ]]; then $PYTHON3 -B test_big.py $@; fi
+if [[ $1 == "parse" ]]; then $PYTHON3 -B test_parse.py $@; fi
+if [[ $1 == "alias" ]]; then $PYTHON3 -B test_alias.py $@; fi
+
