@@ -36,7 +36,7 @@ def run_cmd(cmd, timeout):
 ########################################################################
 def print_output(node, out, args):
 
-   if args.nc:
+   if not args["color"]:
       node_string = f"[{node}]"
       err_node_string = f"[STDERR {node}]"
       code_node_string = f"[CODE {node}]"
@@ -55,14 +55,14 @@ def print_output(node, out, args):
    out1 = ""
    for line in stdout.split("\n"):
       out1 += f"{node_string}: {line}\n"
-   if args.error:
+   if args["error"]:
       for line in stderr.split("\n"):
          out1 += f"{err_node_string}: {line}\n"
-   if args.code:
+   if args["code"]:
       out1 += f"{code_node_string}: {code}\n"
-   if args.debug:
+   if args["debug"]:
       out1 += f"{debug_node_string}: {cmd}\n"
-   if not args.space:
+   if not args["space"]:
       out1 = out1.strip()
 
    with print_lock:
