@@ -1,6 +1,3 @@
 #!/bin/bash
 
-export HPC_TOOLS_PATH=$(dirname $(dirname $(realpath $0) ) )
-source $HPC_TOOLS_PATH/etc/include.sh
-
-$PYTHON3 -B $HPC_TOOLS_PATH/src/pipmi.py "$@"
+/bin/bash $(dirname $(realpath $0) )/run.sh pipmi "$@"

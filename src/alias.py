@@ -11,13 +11,14 @@
 # If a line does not conform to a recognized format, it is skipped
 ########################################################################
 import os
+import util
 
 
 ########################################################################
 def unalias(name):
    
    # Read alias file
-   path = os.environ["HPC_TOOLS_PATH"]
+   path = util.get_root_dir()
    with open(path + "/etc/alias.txt", "r") as f:
       lines = f.readlines()
 

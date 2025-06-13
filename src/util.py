@@ -1,4 +1,7 @@
 import builtins
+import sys
+import os
+
 
 testing = False
 print_buffer = ""
@@ -36,4 +39,9 @@ def reset_print_buffer():
 def set_testing():
     global testing
     testing = True
+
+
+########################################################################
+def get_root_dir():
+    return os.path.dirname(os.path.dirname(sys.argv[0]))
 

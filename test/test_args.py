@@ -2,378 +2,350 @@ import os
 import socket
 import sys
 import subprocess
-import inspect
+import test
+
+sys.path.append("../src")
 import args
-import my
+import util
 
 
 ########################################################################
-def print_pass(testname=None):
-   if testname == None:
-      testname = inspect.stack()[1].function
-   print(f"{testname}: \033[1;32mPass\033[0m")
+def test_parse():
+
+    desc1 = "Desc1"
+    desc2 = "Desc2"
+    arg_default = {
+        "space" : False,
+        "error" : False,
+        "code" : False,
+        "debug" : False,
+        "color" : True,
+        "timeout" : None,
+        "nodelist" : "",
+        "extra" : ""}
+
+    # Check no nodelist
+    try:
+        argv = ["command"]
+        arg = args.parse(argv, desc1, desc2)
+        arg_gold = arg_default.copy()
+        test.print_fail()
+    except SystemExit as e:
+        if e.code == 1:
+            test.print_pass()
+        else:
+            test.print_fail()
+
+    # Check unrecognized argument
+    try:
+        argv = ["command", "--not_an_argument", "nodelist"]
+        arg = args.parse(argv, desc1, desc2)
+        arg_gold = arg_default.copy()
+        test.print_fail()
+    except SystemExit as e:
+        if e.code == 1:
+            test.print_pass()
+        else:
+            test.print_fail()
+
+    # Check simplest command (command and nodelist)
+    argv = ["command", "nodelist"]
+    arg = args.parse(argv, desc1, desc2)
+    arg_gold = arg_default.copy()
+    arg_gold["nodelist"] = "nodelist"
+    if arg == arg_gold:
+        test.print_pass()
+    else:
+        test.print_fail()
+
+    # Check extra args
+    argv = ["command", "nodelist", "hostname", "-s"]
+    arg = args.parse(argv, desc1, desc2)
+    arg_gold = arg_default.copy()
+    arg_gold["nodelist"] = "nodelist"
+    arg_gold["extra"] = "hostname -s"
+    if arg == arg_gold:
+        test.print_pass()
+    else:
+        test.print_fail()
+
+    # Check simple flags
+    argv = ["command", "-s", "-e", "-c", "-d", "--nc", "nodelist"]
+    arg = args.parse(argv, desc1, desc2)
+    arg_gold = arg_default.copy()
+    arg_gold["nodelist"] = "nodelist"
+    arg_gold["space"] = True
+    arg_gold["error"] = True
+    arg_gold["code"] = True
+    arg_gold["debug"] = True
+    arg_gold["color"] = False
+    if arg == arg_gold:
+        test.print_pass()
+    else:
+        test.print_fail()
+
+    # Check simple long flags
+    argv = ["command", "--space", "--error", 
+        "--code", "--debug", "--no-color", "nodelist"]
+    arg = args.parse(argv, desc1, desc2)
+    arg_gold = arg_default.copy()
+    arg_gold["nodelist"] = "nodelist"
+    arg_gold["space"] = True
+    arg_gold["error"] = True
+    arg_gold["code"] = True
+    arg_gold["debug"] = True
+    arg_gold["color"] = False
+    if arg == arg_gold:
+        test.print_pass()
+    else:
+        test.print_fail()
+
+    # Check timeout flag -t10
+    argv = ["command", "-t10", "nodelist"]
+    arg = args.parse(argv, desc1, desc2)
+    arg_gold = arg_default.copy()
+    arg_gold["nodelist"] = "nodelist"
+    arg_gold["timeout"] = 10
+    if arg == arg_gold:
+        test.print_pass()
+    else:
+        test.print_fail()
+
+    # Check timeout flag -t 10
+    argv = ["command", "-t", "10", "nodelist"]
+    arg = args.parse(argv, desc1, desc2)
+    arg_gold = arg_default.copy()
+    arg_gold["nodelist"] = "nodelist"
+    arg_gold["timeout"] = 10
+    if arg == arg_gold:
+        test.print_pass()
+    else:
+        test.print_fail()
+
+    # Check timeout flag --timeout=10
+    argv = ["command", "--timeout=10", "nodelist"]
+    arg = args.parse(argv, desc1, desc2)
+    arg_gold = arg_default.copy()
+    arg_gold["nodelist"] = "nodelist"
+    arg_gold["timeout"] = 10
+    if arg == arg_gold:
+        test.print_pass()
+    else:
+        test.print_fail()
+
+    # Check -v flag
+    util.reset_print_buffer()
+    try:
+        argv = ["command", "-v"]
+        arg = args.parse(argv, desc1, desc2)
+        arg_gold = arg_default.copy()
+        test.print_fail()
+    except SystemExit as e:
+        version = util.get_and_reset_print_buffer().strip()
+        if e.code == 0 and version.startswith("Cluster Commander: Version"):
+            test.print_pass()
+        else:
+            test.print_fail()
+
+    # Check --version flag
+    util.reset_print_buffer()
+    try:
+        argv = ["command", "--version"]
+        arg = args.parse(argv, desc1, desc2)
+        arg_gold = arg_default.copy()
+        test.print_fail()
+    except SystemExit as e:
+        version = util.get_and_reset_print_buffer().strip()
+        if e.code == 0 and version.startswith("Cluster Commander: Version"):
+            test.print_pass()
+        else:
+            test.print_fail()
+
+    # Check -h flag
+    util.reset_print_buffer()
+    try:
+        argv = ["command", "-h"]
+        arg = args.parse(argv, desc1, desc2)
+        arg_gold = arg_default.copy()
+        test.print_fail()
+    except SystemExit as e:
+        help = util.get_and_reset_print_buffer().strip()
+        if e.code == 0 and help.startswith("Desc1") and help.endswith("Desc2"):
+            test.print_pass()
+        else:
+            test.print_fail()
+
+    # Check --help flag
+    util.reset_print_buffer()
+    try:
+        argv = ["command", "--help"]
+        arg = args.parse(argv, desc1, desc2)
+        arg_gold = arg_default.copy()
+        test.print_fail()
+    except SystemExit as e:
+        help = util.get_and_reset_print_buffer().strip()
+        if e.code == 0 and help.startswith("Desc1") and help.endswith("Desc2"):
+            test.print_pass()
+        else:
+            test.print_fail()
 
 
 ########################################################################
-def print_fail(testname=""):
-   testname = inspect.stack()[1].function
-   print(f"{testname}: \033[1;31mFail\033[0m")
+def test_print_version():
 
+    util.reset_print_buffer()
+    args.print_version()
+    version = util.get_and_reset_print_buffer()
+    version_gold = "  Cluster Commander: Version 1.1.0\n"
 
-########################################################################
-def test_ensure_name_char():
+    if version == version_gold:
+        test.print_pass()
+    else:
+        test.print_fail()
 
-   try:
-      parse.ensure_name_char('a')
-      print_pass()
-   except:
-      print_fail()
-
-   try:
-      parse.ensure_name_char('A')
-      print_pass()
-   except:
-      print_fail()
-   
-   try:
-      parse.ensure_name_char('0')
-      print_pass()
-   except:
-      print_fail()
-   
-   try:
-      parse.ensure_name_char('-')
-      print_pass()
-   except:
-      print_fail()
-   
-   try:
-      parse.ensure_name_char('_')
-      print_pass()
-   except:
-      print_fail()
-   
-   try:
-      parse.ensure_name_char('.')
-      print_fail()
-   except:
-      print_pass()
-   
-   try:
-      parse.ensure_name_char('+')
-      print_fail()
-   except:
-      print_pass()
-
-
-########################################################################
-def test_ensure_name():
-
-   try:
-      parse.ensure_name('n0aA-_')
-      print_pass()
-   except:
-      print_fail()
-
-   try:
-      parse.ensure_name('')
-      print_fail()
-   except:
-      print_pass()
-
-   try:
-      parse.ensure_name('0')
-      print_fail()
-   except:
-      print_pass()
-
-   try:
-      parse.ensure_name('n+')
-      print_fail()
-   except:
-      print_pass()
-
-
-########################################################################
-def test_ensure_num():
-
-   try:
-      parse.ensure_num('0')
-      print_pass()
-   except:
-      print_fail()
-
-   try:
-      parse.ensure_num('001')
-      print_pass()
-   except:
-      print_fail()
-
-   try:
-      parse.ensure_num('')
-      print_fail()
-   except:
-      print_pass()
-
-   try:
-      parse.ensure_num('1a')
-      print_fail()
-   except:
-      print_pass()
-
-   try:
-      parse.ensure_num('+1')
-      print_fail()
-   except:
-      print_pass()
-
-   try:
-      parse.ensure_num('-1')
-      print_fail()
-   except:
-      print_pass()
-
-   try:
-      parse.ensure_num('0.1')
-      print_fail()
-   except:
-      print_pass()
-
-
-########################################################################
-def test_parse_num_range():
-
-   if parse.parse_num_range('001') == ['001']:
-      print_pass()
-   else:
-      print_fail()
-
-   if parse.parse_num_range('9-10') == ['9','10']:
-      print_pass()
-   else:
-      print_fail()
-
-   if parse.parse_num_range('0-3') == ['0','1','2','3']:
-      print_pass()
-   else:
-      print_fail()
-
-   if parse.parse_num_range('00-03') == ['00','01','02','03']:
-      print_pass()
-   else:
-      print_fail()
-
-   if parse.parse_num_range('001-004') == ['001','002','003','004']:
-      print_pass()
-   else:
-      print_fail()
-
-   try:
-      parse.parse_num_range('asdf')
-      print_fail()
-   except:
-      print_pass()
-
-   try:
-      parse.parse_num_range('0.1')
-      print_fail()
-   except:
-      print_pass()
-
-   try:
-      parse.parse_num_range('+1')
-      print_fail()
-   except:
-      print_pass()
-
-   try:
-      parse.parse_num_range('-1')
-      print_fail()
-   except:
-      print_pass()
-
-   try:
-      parse.parse_num_range('2-1')
-      print_fail()
-   except:
-      print_pass()
-
-   try:
-      parse.parse_num_range('a-b')
-      print_fail()
-   except:
-      print_pass()
-
-   try:
-      parse.parse_num_range('1-1')
-      print_fail()
-   except:
-      print_pass()
-
-   try:
-      parse.parse_num_range('1-2-3')
-      print_fail()
-   except:
-      print_pass()
-
-
-########################################################################
-def test_parse_num_list():
-
-   if parse.parse_num_list('001') == ['001']:
-      print_pass()
-   else:
-      print_fail()
-
-   if parse.parse_num_list('001,003') == ['001','003']:
-      print_pass()
-   else:
-      print_fail()
-
-   if parse.parse_num_list('001-003,7') == ['001','002','003','7']:
-      print_pass()
-   else:
-      print_fail()
-
-   if parse.parse_num_list('001-003,7-8') == ['001','002','003','7','8']:
-      print_pass()
-   else:
-      print_fail()
 
 
 ########################################################################
 def test_print_help():
 
-    my.set_testing()
+    help2a = "\n  Description 1\n"
+    help3a = "\n  Description 1\n  Description 2\n"
 
-    help2a = ""
-    help2a += "Description 1\n"
-    help2a += "\n"
-
-    help2b = ""
-    help2b += "OPTIONS:\n"
-    help2b += "  -h,  --help               Print this help message\n"
-    help2b += "  -v,  --version            Print version\n"
-    help2b += "  -s,  --space              Add space between hosts\n"
-    help2b += "  -e,  --error              Print standard error\n"
-    help2b += "  -c,  --code               Print return code\n"
-    help2b += "  -d,  --debug              Print command run by this program\n"
-    help2b += "  --nc, --no-color          Do not print in color\n"
-    help2b += "  -t,   --timeout=TIMEOUT   Set timeout in seconds for commands (default: 10)\n"
+    help2b = "\n"
+    help2b += "  OPTIONS:\n"
+    help2b += "    -h,   --help              Print this help message\n"
+    help2b += "    -v,   --version           Print version\n"
+    help2b += "    -s,   --space             Add space between each hosts' output\n"
+    help2b += "    -e,   --error             Print standard error\n"
+    help2b += "    -c,   --code              Print return code\n"
+    help2b += "    -d,   --debug             Print command run by this program\n"
+    help2b += "    --nc, --no-color          Do not print in color\n"
+    help2b += "    -t,   --timeout=TIMEOUT   Set timeout in seconds (default: None)\n"
     help2b += "\n"
-    help2b += "NODELIST:\n"
-    help2b += "  Comma separated list of nodes.  Nodes can use ranges as well.\n"
-    help2b += "  Examples:\n"
-    help2b += "    node1,node2,node3,node5,node6,node7\n"
-    help2b += "    node[1-3],node[5-7]\n"
-    help2b += "    node[1-3,5-7]\n"
-    help2b += "    node[01-10]\n"
+    help2b += "  NODELIST:\n"
+    help2b += "    Comma separated list of nodes.  Nodes can use ranges as well.\n"
+    help2b += "    Examples:\n"
+    help2b += "      node1,node2,node3,node5,node6,node7\n"
+    help2b += "      node[1-3],node[5-7]\n"
+    help2b += "      node[1-3,5-7]\n"
+    help2b += "      node[01-10]\n"
+    help2b += "\n"
 
-    help2c = ""
-    help2c += "\n"
-    help2c += "Description 2\n"
+    help2c = "  Description 2\n\n"
+    help3c = "  Description 3\n  Description 4\n\n"
 
+    # Test single line description 1, no description 2
     args.print_help("Description 1", "")
-    help1 = my.get_and_reset_print_buffer()
+    help1 = util.get_and_reset_print_buffer()
     if help1 == help2a + help2b:
-        print_pass()
+        test.print_pass()
     else:
-        print_fail()
+        test.print_fail()
 
-    args.print_help("Description 1", "Description 2")
-    help1 = my.get_and_reset_print_buffer()
-    if help1 == help2a + help2b + help2c:
-        print_pass()
+    # Test multi line description 1, no description 2
+    args.print_help("Description 1\nDescription 2", "")
+    help1 = util.get_and_reset_print_buffer()
+    if help1 == help3a + help2b:
+        test.print_pass()
     else:
-        print_fail()
+        test.print_fail()
+
+    # Test single line description 1, single line description 2
+    args.print_help("Description 1", "Description 2")
+    help1 = util.get_and_reset_print_buffer()
+    if help1 == help2a + help2b + help2c:
+        test.print_pass()
+    else:
+        test.print_fail()
+
+    # Test multi line description 1, multi line description 2
+    args.print_help("Description 1\nDescription 2", "Description 3\nDescription 4")
+    help1 = util.get_and_reset_print_buffer()
+    if help1 == help3a + help2b + help3c:
+        test.print_pass()
+    else:
+        test.print_fail()
 
 
 ########################################################################
 def test_parse_timeout():
 
+    # Test 0 length string
     try:
         args.parse_timeout("")
-        print_fail()
+        test.print_fail()
     except SystemExit as e:
         if e.code == 1:
-            print_pass()
+            test.print_pass()
         else:
-            print_fail()
+            test.print_fail()
 
+    # Test not digits
     try:
         args.parse_timeout("a")
-        print_fail()
+        test.print_fail()
     except SystemExit as e:
         if e.code == 1:
-            print_pass()
+            test.print_pass()
         else:
-            print_fail()
+            test.print_fail()
 
+    # Test not digits
     try:
         args.parse_timeout("01234a")
-        print_fail()
+        test.print_fail()
     except SystemExit as e:
         if e.code == 1:
-            print_pass()
+            test.print_pass()
         else:
-            print_fail()
+            test.print_fail()
 
-    try:
-        args.parse_timeout("1000000001")
-        print_fail()
-    except SystemExit as e:
-        if e.code == 1:
-            print_pass()
-        else:
-            print_fail()
-
+    # Test zero
     try:
         args.parse_timeout("0")
-        print_fail()
+        test.print_fail()
     except SystemExit as e:
         if e.code == 1:
-            print_pass()
+            test.print_pass()
         else:
-            print_fail()
+            test.print_fail()
 
+    # Test zero
     try:
         args.parse_timeout("00000")
-        print_fail()
+        test.print_fail()
     except SystemExit as e:
         if e.code == 1:
-            print_pass()
+            test.print_pass()
         else:
-            print_fail()
+            test.print_fail()
 
+    # Test good numbers
     if args.parse_timeout("1") == 1:
-        print_pass()
+        test.print_pass()
     else:
-        print_fail()
+        test.print_fail()
 
+    # Test good numbers
     if args.parse_timeout("01") == 1:
-        print_pass()
+        test.print_pass()
     else:
-        print_fail()
+        test.print_fail()
 
+    # Test good numbers
     if args.parse_timeout("1000") == 1000:
-        print_pass()
+        test.print_pass()
     else:
-        print_fail()
-
-    if args.parse_timeout("1000000000") == 1000000000:
-        print_pass()
-    else:
-        print_fail()
+        test.print_fail()
 
 
 ########################################################################
 if __name__ == "__main__":
-    #test_ensure_name_char()
-    #test_ensure_name()
-    #test_ensure_num()
-    #test_parse_num_range()
-    #test_parse_num_list()
-    #test_parse_node_range()
+
+    util.set_testing()
+
+    test_parse()
+    test_print_version()
     test_print_help()
     test_parse_timeout()
 
