@@ -1,0 +1,128 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[CODE hn001]: 0
+[CODE hn002]: 0
+[CODE hn003]: 0
+[CODE hn004]: 0
+[CODE hn005]: 0
+[CODE hn006]: 0
+[CODE hn007]: 0
+[CODE hn008]: 0
+[CODE hn009]: 0
+[CODE hn010]: 0
+[CODE hn011]: 0
+[CODE hn012]: 0
+[CODE hn013]: 0
+[CODE hn014]: 0
+[CODE hn015]: 0
+[CODE hn016]: 0
+[CODE hn017]: 0
+[CODE hn018]: 0
+[CODE hn019]: 0
+[CODE hn020]: 0
+[CODE hn021]: 0
+[CODE hn022]: 0
+[CODE hn023]: 0
+[CODE hn024]: 0
+[CODE hn025]: 0
+[CODE hn026]: 0
+[CODE hn027]: 0
+[CODE hn028]: 0
+[CODE hn029]: 0
+[CODE hn030]: 0
+[CODE hn031]: 0
+[CODE hn032]: 0
+[hn001]: Chassis Power is on
+[hn002]: Chassis Power is on
+[hn003]: Chassis Power is on
+[hn004]: Chassis Power is on
+[hn005]: Chassis Power is on
+[hn006]: Chassis Power is on
+[hn007]: Chassis Power is on
+[hn008]: Chassis Power is on
+[hn009]: Chassis Power is on
+[hn010]: Chassis Power is on
+[hn011]: Chassis Power is on
+[hn012]: Chassis Power is on
+[hn013]: Chassis Power is on
+[hn014]: Chassis Power is on
+[hn015]: Chassis Power is on
+[hn016]: Chassis Power is on
+[hn017]: Chassis Power is on
+[hn018]: Chassis Power is on
+[hn019]: Chassis Power is on
+[hn020]: Chassis Power is on
+[hn021]: Chassis Power is on
+[hn022]: Chassis Power is on
+[hn023]: Chassis Power is on
+[hn024]: Chassis Power is on
+[hn025]: Chassis Power is on
+[hn026]: Chassis Power is on
+[hn027]: Chassis Power is on
+[hn028]: Chassis Power is on
+[hn029]: Chassis Power is on
+[hn030]: Chassis Power is on
+[hn031]: Chassis Power is on
+[hn032]: Chassis Power is on
+[STDERR hn001]: 
+[STDERR hn002]: 
+[STDERR hn003]: 
+[STDERR hn004]: 
+[STDERR hn005]: 
+[STDERR hn006]: 
+[STDERR hn007]: 
+[STDERR hn008]: 
+[STDERR hn009]: 
+[STDERR hn010]: 
+[STDERR hn011]: 
+[STDERR hn012]: 
+[STDERR hn013]: 
+[STDERR hn014]: 
+[STDERR hn015]: 
+[STDERR hn016]: 
+[STDERR hn017]: 
+[STDERR hn018]: 
+[STDERR hn019]: 
+[STDERR hn020]: 
+[STDERR hn021]: 
+[STDERR hn022]: 
+[STDERR hn023]: 
+[STDERR hn024]: 
+[STDERR hn025]: 
+[STDERR hn026]: 
+[STDERR hn027]: 
+[STDERR hn028]: 
+[STDERR hn029]: 
+[STDERR hn030]: 
+[STDERR hn031]: 
+[STDERR hn032]: 

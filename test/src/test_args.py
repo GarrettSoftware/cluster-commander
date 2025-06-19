@@ -32,9 +32,9 @@ def test_parse():
         test.print_fail()
     except SystemExit as e:
         if e.code == 1:
-            test.print_pass()
+            test.print_pass("no nodelist")
         else:
-            test.print_fail()
+            test.print_fail("no nodelist")
 
     # Check unrecognized argument
     try:
@@ -44,9 +44,9 @@ def test_parse():
         test.print_fail()
     except SystemExit as e:
         if e.code == 1:
-            test.print_pass()
+            test.print_pass("unrecognized arg")
         else:
-            test.print_fail()
+            test.print_fail("unrecognized arg")
 
     # Check simplest command (command and nodelist)
     argv = ["command", "nodelist"]
@@ -54,9 +54,9 @@ def test_parse():
     arg_gold = arg_default.copy()
     arg_gold["nodelist"] = "nodelist"
     if arg == arg_gold:
-        test.print_pass()
+        test.print_pass("simple")
     else:
-        test.print_fail()
+        test.print_fail("simple")
 
     # Check extra args
     argv = ["command", "nodelist", "hostname", "-s"]
@@ -65,9 +65,9 @@ def test_parse():
     arg_gold["nodelist"] = "nodelist"
     arg_gold["extra"] = "hostname -s"
     if arg == arg_gold:
-        test.print_pass()
+        test.print_pass("extra args")
     else:
-        test.print_fail()
+        test.print_fail("extra args")
 
     # Check simple flags
     argv = ["command", "-s", "-e", "-c", "-d", "--nc", "nodelist"]
@@ -80,9 +80,9 @@ def test_parse():
     arg_gold["debug"] = True
     arg_gold["color"] = False
     if arg == arg_gold:
-        test.print_pass()
+        test.print_pass("flags")
     else:
-        test.print_fail()
+        test.print_fail("flags")
 
     # Check simple long flags
     argv = ["command", "--space", "--error", 
@@ -96,9 +96,9 @@ def test_parse():
     arg_gold["debug"] = True
     arg_gold["color"] = False
     if arg == arg_gold:
-        test.print_pass()
+        test.print_pass("flags")
     else:
-        test.print_fail()
+        test.print_fail("flags")
 
     # Check timeout flag -t10
     argv = ["command", "-t10", "nodelist"]
@@ -107,9 +107,9 @@ def test_parse():
     arg_gold["nodelist"] = "nodelist"
     arg_gold["timeout"] = 10
     if arg == arg_gold:
-        test.print_pass()
+        test.print_pass("timeout")
     else:
-        test.print_fail()
+        test.print_fail("timeout")
 
     # Check timeout flag -t 10
     argv = ["command", "-t", "10", "nodelist"]
@@ -118,9 +118,9 @@ def test_parse():
     arg_gold["nodelist"] = "nodelist"
     arg_gold["timeout"] = 10
     if arg == arg_gold:
-        test.print_pass()
+        test.print_pass("timeout")
     else:
-        test.print_fail()
+        test.print_fail("timeout")
 
     # Check timeout flag --timeout=10
     argv = ["command", "--timeout=10", "nodelist"]
@@ -129,9 +129,9 @@ def test_parse():
     arg_gold["nodelist"] = "nodelist"
     arg_gold["timeout"] = 10
     if arg == arg_gold:
-        test.print_pass()
+        test.print_pass("timeout")
     else:
-        test.print_fail()
+        test.print_fail("timeout")
 
     # Check -v flag
     util.reset_print_buffer()
@@ -139,13 +139,13 @@ def test_parse():
         argv = ["command", "-v"]
         arg = args.parse(argv, desc1, desc2)
         arg_gold = arg_default.copy()
-        test.print_fail()
+        test.print_fail("version")
     except SystemExit as e:
         version = util.get_and_reset_print_buffer().strip()
         if e.code == 0 and version.startswith("Cluster Commander: Version"):
-            test.print_pass()
+            test.print_pass("version")
         else:
-            test.print_fail()
+            test.print_fail("version")
 
     # Check --version flag
     util.reset_print_buffer()
@@ -153,13 +153,13 @@ def test_parse():
         argv = ["command", "--version"]
         arg = args.parse(argv, desc1, desc2)
         arg_gold = arg_default.copy()
-        test.print_fail()
+        test.print_fail("version")
     except SystemExit as e:
         version = util.get_and_reset_print_buffer().strip()
         if e.code == 0 and version.startswith("Cluster Commander: Version"):
-            test.print_pass()
+            test.print_pass("version")
         else:
-            test.print_fail()
+            test.print_fail("version")
 
     # Check -h flag
     util.reset_print_buffer()
@@ -167,13 +167,13 @@ def test_parse():
         argv = ["command", "-h"]
         arg = args.parse(argv, desc1, desc2)
         arg_gold = arg_default.copy()
-        test.print_fail()
+        test.print_fail("help")
     except SystemExit as e:
         help = util.get_and_reset_print_buffer().strip()
         if e.code == 0 and help.startswith("Desc1") and help.endswith("Desc2"):
-            test.print_pass()
+            test.print_pass("help")
         else:
-            test.print_fail()
+            test.print_fail("help")
 
     # Check --help flag
     util.reset_print_buffer()
@@ -181,13 +181,13 @@ def test_parse():
         argv = ["command", "--help"]
         arg = args.parse(argv, desc1, desc2)
         arg_gold = arg_default.copy()
-        test.print_fail()
+        test.print_fail("help")
     except SystemExit as e:
         help = util.get_and_reset_print_buffer().strip()
         if e.code == 0 and help.startswith("Desc1") and help.endswith("Desc2"):
-            test.print_pass()
+            test.print_pass("help")
         else:
-            test.print_fail()
+            test.print_fail("help")
 
 
 ########################################################################

@@ -48,5 +48,15 @@ def is_testing():
 
 ################################################################################
 def get_root_dir():
-    return os.path.dirname(os.path.dirname(sys.argv[0]))
+    root_dir = os.path.dirname(sys.argv[0])
+    while True:
+        if root_dir == "/":
+            util.print("Error: Internal error - get_root_dir")
+            sys.exit(1)
+        if not os.path.exists(root_dir + "/version.txt"):
+            root_dir = os.path.dirname(root_dir)
+        else:
+            break
+
+    return root_dir
 
