@@ -1,3 +1,0 @@
-#!/bin/bash
-
-/bin/bash $(dirname $(realpath $0) )/run.sh pcopy "$@"

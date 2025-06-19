@@ -9,3 +9,5 @@ run_test() {
 run_test test_alias.sh
 run_test test_args.sh
 run_test test_parse.sh
+run_test test_pipmi.sh
+

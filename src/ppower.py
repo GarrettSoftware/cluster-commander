@@ -1,57 +1,50 @@
-import argparse
-import misc
+import args
+import run
 import ipmi
-import os
+import sys
+import util
 
 
-########################################################################
-def ppower(node, args, ipmi_data):
+################################################################################
+def ppower(node, args):
 
-   ipmi_command = ipmi_data.get_command(node)
+    ipmi_command = ipmi.get_command(node)
+    args_command = args["extra"]
 
-   if args.command == "status":
-      ipmi_command += " power status"
-   elif args.command == "on":
-      ipmi_command += " power on"
-   elif args.command == "off":
-      ipmi_command += " power off"
-   elif args.command == "cycle":
-      ipmi_command += " power cycle"
-   elif args.command == "reset":
-      ipmi_command += " power reset"
-   elif args.command == "soft":
-      ipmi_command += " power soft"
-   else:
-      print(args.command + ": command not supported")
-      return
+    if args_command == "status":
+        ipmi_command += " power status"
+    elif args_command == "on":
+        ipmi_command += " power on"
+    elif args_command == "off":
+        ipmi_command += " power off"
+    elif args_command == "cycle":
+        ipmi_command += " power cycle"
+    elif args_command == "reset":
+        ipmi_command += " power reset"
+    elif args_command == "soft":
+        ipmi_command += " power soft"
+    else:
+        print(args_command + ": command not supported")
+        return
 
-   out = misc.run_cmd(ipmi_command, args.timeout)
-   misc.print_output(node, out, args)
+    out = run.run_cmd(ipmi_command, args["timeout"])
+    run.print_output(node, out, args)
 
 
-########################################################################
+################################################################################
 if __name__ == "__main__":
 
-   description = \
-         "Issue IPMI power commands in parallel across multiple nodes.\n" + \
-         "Each command calls the equivalent IPMI power command.\n" + \
-         "  status: get power status\n" + \
-         "  on:     turn on\n" + \
-         "  off:    turn off\n" + \
-         "  cycle:  turn off, then on\n" + \
-         "  reset:  turn off, then on; less of an off state than cycle\n" + \
-         "  soft:   start OS shutdown"
-      
-   parser = argparse.ArgumentParser(
-      prog="ppower", formatter_class=argparse.RawTextHelpFormatter,
-      description=description)
+    desc = "Usage: ppower [OPTIONS] NODELIST COMMAND\n" + \
+        "Run an IPMI power command in parallel across several nodes"
+    desc2 = "COMMAND can be any of the following:\n" + \
+        "  status: get power status\n" + \
+        "  on:     turn on\n" + \
+        "  off:    turn off\n" + \
+        "  cycle:  turn off, then on\n" + \
+        "  reset:  turn off, then on; less of an off state than cycle\n" + \
+        "  soft:   start OS shutdown"
 
-   misc.add_common_parser_options(parser)
-   parser.add_argument("command", 
-      help="IPMI power command")
-   args = misc.parse_args(parser)
+    args = args.parse(sys.argv, desc, desc2)
+    ipmi.read_etc(util.get_root_dir() + "/etc/ipmi.txt")
+    run.run_in_parallel(args["nodelist"], ppower, (args,))
 
-   path = os.environ["HPC_TOOLS_PATH"]
-   ipmi_data = ipmi.Ipmi_Data(path + "/etc/ipmi.txt")
-
-   misc.run_in_parallel(args.node_list, ppower, (args,ipmi_data,))

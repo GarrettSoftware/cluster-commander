@@ -11,17 +11,17 @@ print_lock = threading.Lock()
 ########################################################################
 def run_cmd(cmd, timeout):
 
-   try:
-      proc = subprocess.run(cmd, capture_output=True, shell=True, timeout=timeout)
-      out = proc.stdout.decode('utf-8',errors='ignore').strip()
-      err = proc.stderr.decode('utf-8',errors='ignore').strip()
-      code = proc.returncode
-   except:
-      out = f"<timeout: {timeout}s>"
-      err = f"<timeout: {timeout}s>"
-      code = -1
+    try:
+        proc = subprocess.run(cmd, capture_output=True, shell=True, timeout=timeout)
+        out = proc.stdout.decode('utf-8',errors='ignore').strip()
+        err = proc.stderr.decode('utf-8',errors='ignore').strip()
+        code = proc.returncode
+    except:
+        out = f"<timeout: {timeout}s>"
+        err = f"<timeout: {timeout}s>"
+        code = -1
 
-   return (out, err, code, cmd)
+    return (out, err, code, cmd)
 
 
 ########################################################################

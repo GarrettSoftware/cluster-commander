@@ -3,7 +3,7 @@ import run
 import args
 
 
-########################################################################
+################################################################################
 def pping(node, args):
 
     out = run.run_cmd(f"ping -c 1 {node}", args["timeout"])
@@ -14,10 +14,11 @@ def pping(node, args):
     run.print_output(node, out1, args)
 
 
-########################################################################
+################################################################################
 if __name__ == "__main__":
 
-    desc = "Ping multiple nodes in parallel"
+    desc = "Usage: pping [OPTIONS] NODELIST\n" + \
+        "Run ping in parallel across several nodes"
 
     args = args.parse(sys.argv, desc)
     run.run_in_parallel(args["nodelist"], pping, (args,))
