@@ -10,9 +10,7 @@ import ipmi
 ################################################################################
 def test_pipmi():
 
-    cmd = util.reset_print_buffer()
-    args = {
-        "extra" : "sel list"}
+    args = {"extra" : "sel list"}
     pipmi.pipmi("cn001", args)
     cmd = util.get_and_reset_print_buffer()
     cmd_gold = "ipmitool -C 3 -I lanplus -H cn001-ipmi -U root -P P@ssw0rd sel list\n"
@@ -37,6 +35,7 @@ def test_main():
 ################################################################################
 if __name__ == "__main__":
     util.set_testing()
+    util.reset_print_buffer()
     ipmi.read_etc("ipmi.txt")
 
     test_main()

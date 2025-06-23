@@ -24,15 +24,18 @@ def ppower(node, args):
     elif args_command == "soft":
         ipmi_command += " power soft"
     else:
-        print(args_command + ": command not supported")
+        util.print(args_command + ": command not supported")
         return
 
-    out = run.run_cmd(ipmi_command, args["timeout"])
-    run.print_output(node, out, args)
+    if util.is_testing():
+        util.print(ipmi_command)
+    else:
+        out = run.run_cmd(ipmi_command, args["timeout"])
+        run.print_output(node, out, args)
 
 
 ################################################################################
-if __name__ == "__main__":
+def main(argv):
 
     desc = "Usage: ppower [OPTIONS] NODELIST COMMAND\n" + \
         "Run an IPMI power command in parallel across several nodes"
@@ -44,7 +47,12 @@ if __name__ == "__main__":
         "  reset:  turn off, then on; less of an off state than cycle\n" + \
         "  soft:   start OS shutdown"
 
-    args = args.parse(sys.argv, desc, desc2)
+    args1 = args.parse(argv, desc, desc2)
     ipmi.read_etc(util.get_root_dir() + "/etc/ipmi.txt")
-    run.run_in_parallel(args["nodelist"], ppower, (args,))
+    run.run_in_parallel(args1["nodelist"], ppower, (args1,))
+
+
+################################################################################
+if __name__ == "__main__":
+    main(sys.argv)
 

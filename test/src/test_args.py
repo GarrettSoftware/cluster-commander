@@ -196,7 +196,7 @@ def test_print_version():
     util.reset_print_buffer()
     args.print_version()
     version = util.get_and_reset_print_buffer()
-    version_gold = "  Cluster Commander: Version 1.1.0\n"
+    version_gold = "  Cluster Commander: Version 1.1.0 beta\n"
 
     if version == version_gold:
         test.print_pass()

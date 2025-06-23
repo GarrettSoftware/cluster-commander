@@ -194,6 +194,14 @@ def test_pping():
         test.print_fail("normal")
 
 
+    # Test bad call
+    os.system("../bin/pping hn1 | sort > /tmp/cc-test.txt")
+    if filecmp.cmp("/tmp/cc-test.txt", "gold/pping_badhost.txt"):
+        test.print_pass("badhost")
+    else:
+        test.print_fail("badhost")
+
+
     # Test lots of flags
     flags = "-s -e -c --nc"
     os.system(f"../bin/pping {flags} hn | sort > /tmp/cc-test.txt")
