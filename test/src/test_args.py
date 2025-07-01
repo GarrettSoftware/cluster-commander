@@ -196,13 +196,12 @@ def test_print_version():
     util.reset_print_buffer()
     args.print_version()
     version = util.get_and_reset_print_buffer()
-    version_gold = "  Cluster Commander: Version 1.1.0 beta\n"
+    version_gold = "  Cluster Commander: Version 1.1.0\n"
 
     if version == version_gold:
         test.print_pass()
     else:
         test.print_fail()
-
 
 
 ########################################################################
@@ -223,12 +222,17 @@ def test_print_help():
     help2b += "    -t,   --timeout=TIMEOUT   Set timeout in seconds (default: None)\n"
     help2b += "\n"
     help2b += "  NODELIST:\n"
-    help2b += "    Comma separated list of nodes.  Nodes can use ranges as well.\n"
+    help2b += "    Comma separated list of nodes, node ranges, and aliases.\n"
+    help2b += "    An alias allows you to aggregate nodes into a single name\n"
+    help2b += "    such as nodes meaning node[01-10].\n"
+    help2b += "    Aliases are specified in the etc/alias.txt file.\n"
+    help2b += "\n"
     help2b += "    Examples:\n"
     help2b += "      node1,node2,node3,node5,node6,node7\n"
     help2b += "      node[1-3],node[5-7]\n"
     help2b += "      node[1-3,5-7]\n"
     help2b += "      node[01-10]\n"
+    help2b += "      nodes\n"
     help2b += "\n"
 
     help2c = "  Description 2\n\n"

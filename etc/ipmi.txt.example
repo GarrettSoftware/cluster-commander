@@ -1,6 +1,6 @@
 # This file contains aliases IPMI names and login credentials
 # It must be copied to ipmi.txt
-# Format: alias_name  node  user  password  cipher_suite
+# Format: hostname  ipmi-hostname  user  password  cipher_suite
 
 # Example
 node[001-128]  node[001-128]-ipmi   root     password       17

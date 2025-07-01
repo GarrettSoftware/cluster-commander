@@ -118,12 +118,17 @@ def print_help(description, description2):
     util.print("    -t,   --timeout=TIMEOUT   Set timeout in seconds (default: None)")
     util.print("")
     util.print("  NODELIST:")
-    util.print("    Comma separated list of nodes.  Nodes can use ranges as well.")
+    util.print("    Comma separated list of nodes, node ranges, and aliases.")
+    util.print("    An alias allows you to aggregate nodes into a single name")
+    util.print("    such as nodes meaning node[01-10].")
+    util.print("    Aliases are specified in the etc/alias.txt file.")
+    util.print("")
     util.print("    Examples:")
     util.print("      node1,node2,node3,node5,node6,node7")
     util.print("      node[1-3],node[5-7]")
     util.print("      node[1-3,5-7]")
     util.print("      node[01-10]")
+    util.print("      nodes")
 
     if description2 != "":
         util.print("")
