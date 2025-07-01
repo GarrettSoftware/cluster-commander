@@ -1,32 +1,36 @@
-import threading
-import parse
-import argparse
-import misc
+import args
+import run
 import ipmi
-import os
+import sys
+import util
 
 
-########################################################################
-def pipmi(node, args, ipmi_data):
+################################################################################
+def pipmi(node, args):
 
-   ipmi_command = ipmi_data.get_command(node)
-   ipmi_command += " " + args.command
-   out = misc.run_cmd(ipmi_command, args.timeout)
-   misc.print_output(node, out, args)
+    ipmi_command = ipmi.get_command(node)
+    ipmi_command += " " + args["extra"]
+    if util.is_testing():
+        util.print(ipmi_command)
+    else:
+        out = run.run_cmd(ipmi_command, args["timeout"])
+        run.print_output(node, out, args)
 
 
-########################################################################
+################################################################################
+def main(argv):
+
+    desc = "Usage: pipmi [OPTIONS] NODELIST COMMAND\n" + \
+        "Run an IPMI command in parallel across several nodes"
+    desc2 = "COMMAND:\n" + \
+        "  The command to run across each node"
+
+    args1 = args.parse(argv, desc, desc2)
+    ipmi.read_etc(util.get_root_dir() + "/etc/ipmi.txt")
+    run.run_in_parallel(args1["nodelist"], pipmi, (args1,))
+
+
+################################################################################
 if __name__ == "__main__":
+    main(sys.argv)
 
-   parser = argparse.ArgumentParser(
-      prog="pipmi",
-      description="Issue IPMI commands in parallel across multiple nodes")
-
-   misc.add_common_parser_options(parser)
-   parser.add_argument("command", help="IPMI command to run on nodes")
-   args = misc.parse_args(parser)
-
-   path = os.environ["HPC_TOOLS_PATH"]
-   ipmi_data = ipmi.Ipmi_Data(path + "/etc/ipmi.txt")
-
-   misc.run_in_parallel(args.node_list, pipmi, (args,ipmi_data,))

@@ -1,23 +1,34 @@
-import argparse
-import misc
+import run
+import args
+import sys
+import util
 
 
-########################################################################
+################################################################################
 def pcmd(node, args):
 
-   out = misc.run_cmd(f"ssh {node} '{args.command}'", args.timeout)
-   misc.print_output(node, out, args)
+    cmd = args["extra"]
+    pcmd_command = f"ssh {node} '{cmd}'"
+    if util.is_testing():
+        util.print(pcmd_command)
+    else:
+        out = run.run_cmd(pcmd_command, args["timeout"])
+        run.print_output(node, out, args)
 
 
-########################################################################
+################################################################################
+def main(argv):
+
+    desc = "Usage: pcmd [OPTIONS] NODELIST COMMAND\n" + \
+        "Run a command in parallel across several nodes using ssh"
+    desc2 = "COMMAND:\n" + \
+        "  The command to run across each node"
+
+    args1 = args.parse(argv, desc, desc2)
+    run.run_in_parallel(args1["nodelist"], pcmd, (args1,))
+
+
+################################################################################
 if __name__ == "__main__":
+    main(sys.argv)
 
-   parser = argparse.ArgumentParser(
-      prog="pcmd",
-      description="Run a command in parallel across several nodes using ssh")
-
-   misc.add_common_parser_options(parser)
-   parser.add_argument("command", help="Command to run on nodes")
-   args = misc.parse_args(parser)
-
-   misc.run_in_parallel(args.node_list, pcmd, (args,))
