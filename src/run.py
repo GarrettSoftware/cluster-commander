@@ -1,9 +1,10 @@
 import subprocess
 import threading
+import time
 import parse
 import util
 
-print_lock = threading.Lock()
+PRINT_LOCK = threading.Lock()
 
 
 ################################################################################
@@ -13,12 +14,13 @@ print_lock = threading.Lock()
 def run_cmd(cmd, timeout):
 
     try:
-        proc = subprocess.run(cmd, capture_output=True, shell=True, 
-            timeout=timeout)
-        out = proc.stdout.decode('utf-8',errors='ignore').strip()
-        err = proc.stderr.decode('utf-8',errors='ignore').strip()
+        proc = subprocess.run(
+            cmd, capture_output=True, shell=True,
+            timeout=timeout, check=False)
+        out = proc.stdout.decode('utf-8', errors='ignore').strip()
+        err = proc.stderr.decode('utf-8', errors='ignore').strip()
         code = proc.returncode
-    except:
+    except subprocess.TimeoutExpired:
         out = f"<timeout: {timeout}s>"
         err = f"<timeout: {timeout}s>"
         code = -1
@@ -33,6 +35,9 @@ def run_cmd(cmd, timeout):
 # Can optionally print in color for node names.
 ################################################################################
 def print_output(node, out, args):
+
+    # Gives time to turn off printing across threads
+    time.sleep(0.25)
 
     if not args["color"]:
         node_string = f"[{node}]"
@@ -63,7 +68,7 @@ def print_output(node, out, args):
     if not args["space"]:
         out1 = out1.strip()
 
-    with print_lock:
+    with PRINT_LOCK:
         util.print(out1)
 
 
@@ -75,10 +80,9 @@ def run_in_parallel(node_list_string, function, args):
     threadlist = []
     for node in node_list:
         args1 = (node,) + args
-        t = threading.Thread(target=function, args=args1)
-        t.start()
-        threadlist.append(t)
+        thread = threading.Thread(target=function, args=args1)
+        thread.start()
+        threadlist.append(thread)
 
-    for t in threadlist:
-        t.join()
-
+    for thread in threadlist:
+        thread.join()

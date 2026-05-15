@@ -17,8 +17,6 @@ shift
 # Do appropriate command
 if [[ $CMD == "pcmd" ]]; then
     $PYTHON3 -B $ROOTDIR/src/$CMD.py "$@"
-elif [[ $CMD == "pcopy" ]]; then
-    $PYTHON3 -B $ROOTDIR/src/$CMD.py "$@"
 elif [[ $CMD == "pipmi" ]]; then
     $PYTHON3 -B $ROOTDIR/src/$CMD.py "$@"
 elif [[ $CMD == "pping" ]]; then

@@ -1,8 +1,4 @@
-import sys
 import test
-
-sys.path.append("../src")
-import ipmi
 
 
 ########################################################################
@@ -17,6 +13,5 @@ def test_get_command():
 
 ########################################################################
 if __name__ == "__main__":
-   test_read_etc()
-   test_get_command()
-
+    test_read_etc()
+    test_get_command()

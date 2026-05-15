@@ -11,10 +11,11 @@ import util
 #   description2 - Description of program after all text
 #
 # Return:
-#   args         - Returns a dictionary of all argument possibilities, 
+#   args         - Returns a dictionary of all argument possibilities,
 #                  the nodelist, and any extra arguments as one string.
 ################################################################################
 def parse(argv, description, description2=""):
+    # pylint: disable=too-many-branches
 
     # Default arguments meant for interactive session
     # extra is the parameters after the nodelist
@@ -41,21 +42,21 @@ def parse(argv, description, description2=""):
             continue
 
         if state == "dashes":
-            if arg == '-v' or arg == '--version':
+            if arg in ('-v', '--version'):
                 print_version()
                 sys.exit(0)
-            elif arg == '-h' or arg == '--help':
+            elif arg in ('-h', '--help'):
                 print_help(description, description2)
                 sys.exit(0)
-            elif arg == '-s' or arg == '--space':
+            elif arg in ('-s', '--space'):
                 args['space'] = True
-            elif arg == '-e' or arg == '--error':
+            elif arg in ('-e', '--error'):
                 args['error'] = True
-            elif arg == '-c' or arg == '--code':
+            elif arg in ('-c', '--code'):
                 args['code'] = True
-            elif arg == '-d' or arg == '--debug':
+            elif arg in ('-d', '--debug'):
                 args['debug'] = True
-            elif arg == '--nc' or arg == '--no-color':
+            elif arg in ('--nc', '--no-color'):
                 args['color'] = False
             elif arg == '-t':
                 if len(argv) < i+2:
@@ -68,7 +69,7 @@ def parse(argv, description, description2=""):
             elif arg[0:10] == '--timeout=':
                 args['timeout'] = parse_timeout(arg[10:])
             elif arg[0:1] == '-':
-                f"Error: Unrecognized argument {args}"
+                util.print(f"Error: Unrecognized argument {args}")
                 sys.exit(1)
             else:
                 state = "extra"
@@ -86,15 +87,15 @@ def parse(argv, description, description2=""):
 
 
 ################################################################################
-def parse_timeout(s):
-    if len(s) == 0:
-        util.print("Error: Could not parse timeout value: '{s}'")
+def parse_timeout(string):
+    if len(string) == 0:
+        util.print("Error: Could not parse timeout value: '{string}'")
         sys.exit(1)
-    if not s.isdigit():
-        util.print("Error: Could not parse timeout value: '{s}'")
+    if not string.isdigit():
+        util.print("Error: Could not parse timeout value: '{string}'")
         sys.exit(1)
 
-    retval = int(s)
+    retval = int(string)
     if retval == 0:
         util.print("Error: Timeout cannot be zero")
         sys.exit(1)
@@ -141,7 +142,6 @@ def print_help(description, description2):
 ################################################################################
 def print_version():
     path = util.get_root_dir()
-    with open(f"{path}/version.txt", "r") as f:
-        version = f.read().strip()
+    with open(f"{path}/version.txt", "r") as fil:
+        version = fil.read().strip()
     util.print(f"  Cluster Commander: Version {version}")
-

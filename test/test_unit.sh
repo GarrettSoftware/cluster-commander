@@ -17,6 +17,7 @@ if [[ $# == 0 ]]; then
     run_test test_ppower.py
     run_test test_run.py
     run_test test_util.py
+    run_test test_pylint.py
     exit 0
 elif [[ $1 == "alias" ]]; then
     run_test test_alias.py
@@ -38,4 +39,6 @@ elif [[ $1 == "run" ]]; then
     run_test test_run.py
 elif [[ $1 == "util" ]]; then
     run_test test_util.py
+elif [[ $1 == "pylint" ]]; then
+    run_test test_pylint.py
 fi

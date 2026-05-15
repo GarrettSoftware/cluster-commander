@@ -10,140 +10,137 @@ import alias
 
 
 ########################################################################
-def ensure_name_char(s):
-   if len(s) != 1:
-      raise Exception("ensure_name_char")
+def ensure_name_char(char):
+    if len(char) != 1:
+        raise Exception("ensure_name_char")
 
-   if s in "abcdefghijklmnopqrstuvwxyz":
-      return None
-   if s in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
-      return None
-   if s in "0123456789":
-      return None
-   if s in "-_":
-      return None
+    if char in "abcdefghijklmnopqrstuvwxyz":
+        return None
+    if char in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+        return None
+    if char in "0123456789":
+        return None
+    if char in "-_":
+        return None
 
-   raise Exception("ensure_name_char")
-
-
-########################################################################
-def ensure_name(s):
-   if len(s) == 0:
-      raise Exception("ensure_name")
-   if not s[0].isalpha():
-      raise Exception("ensure_name")
-   for i in range(1,len(s)):
-      ensure_name_char(s[i])
+    raise Exception("ensure_name_char")
 
 
 ########################################################################
-def ensure_num(s):
-   if len(s) == 0:
-      raise Exception("ensure_num")
-   if not s.isdigit():
-      raise Exception("ensure_num")
-   
-
-########################################################################
-def parse_num_range(s):
-
-   split = s.split("-")
-
-   if len(split) == 1:
-      ensure_num(split[0])
-      return [split[0]]
-
-   elif len(split) == 2:
-      s0 = split[0]
-      s1 = split[1]
-
-      ensure_num(s0)
-      ensure_num(s1)
-      
-      i0 = int(split[0])
-      i1 = int(split[1])
-      
-      if i0 >= i1:
-         raise Exception("parse_num_range")
-
-      # Format to ensure 001-003 keeps leading zeros
-      # Ex {:03d}
-      format_string = "{:0" + str(len(s0)) + "d}"
-      num_range = []
-      for num in range(i0, i1+1):
-         num_range.append(format_string.format(num))
-      return num_range
-
-   else:
-      raise Exception("parse_num_range")
+def ensure_name(string):
+    if len(string) == 0:
+        raise Exception("ensure_name")
+    if not string[0].isalpha():
+        raise Exception("ensure_name")
+    for i in range(1, len(string)):
+        ensure_name_char(string[i])
 
 
 ########################################################################
-def parse_num_list(s):
-   num_list = []
-   for num_range in s.split(","):
-      num_list.extend(parse_num_range(num_range))
-   return num_list
+def ensure_num(string):
+    if len(string) == 0:
+        raise Exception("ensure_num")
+    if not string.isdigit():
+        raise Exception("ensure_num")
 
 
 ########################################################################
-def parse_node_range(s):
+def parse_num_range(string):
 
-   # No brackets
-   if s.count("[") == 0 and s.count("]") == 0:
-      ensure_name(s)
-      return [s]
+    split = string.split("-")
 
-   # Brackets
-   elif s.count("[") == 1 and s.count("]") == 1:
-      b1 = s.find("[")
-      b2 = s.find("]")
+    if len(split) == 1:
+        ensure_num(split[0])
+        return [split[0]]
 
-      if b1 == 0 or b1 >= b2:
-         raise Exception("parse_node_range")
+    if len(split) == 2:
+        string0 = split[0]
+        string1 = split[1]
 
-      node_range = []
-      num_list = parse_num_list(s[b1+1:b2])
-      prepend = s[0:b1]
-      append = s[b2+1:]
-      ensure_name(prepend)
-      for c in append:
-         ensure_name_char(c)
+        ensure_num(string0)
+        ensure_num(string1)
 
-      for num in num_list:
-         node_range.append(prepend + num + append)
-      return node_range
+        idx0 = int(split[0])
+        idx1 = int(split[1])
 
-   # Wrong number of brackets
-   else:
-      raise Exception("parse_node_range")
+        if idx0 >= idx1:
+            raise Exception("parse_num_range")
+
+        # Format to ensure 001-003 keeps leading zeros
+        # Ex {:03d}
+        format_string = "{:0" + str(len(string0)) + "d}"
+        num_range = []
+        for num in range(idx0, idx1+1):
+            num_range.append(format_string.format(num))
+        return num_range
+
+    raise Exception("parse_num_range")
 
 
 ########################################################################
-def parse_node_list(s):
+def parse_num_list(string):
+    num_list = []
+    for num_range in string.split(","):
+        num_list.extend(parse_num_range(num_range))
+    return num_list
 
-   # Replace node_range delimiter with |
-   # This is done because we can have a comma delimiter for 2 reasons
-   # Ex: node[1,3],headnode 
-   # Comma delimits both "1,3" and node[1,3] from headnode
-   # In this example we change 2nd comma to |
-   # Ex: node[1,3],headnode -> node[1,3]|headnode
-   # This makes each delimiter unique in its usage
-   no_bracket = True
-   s1 = ""
-   for i in range(0,len(s)):
-      if s[i] == "," and no_bracket:
-         s1 += "|"
-      else:
-         s1 += s[i]
-      if s[i] == "[":
-         no_bracket = False
-      elif s[i] == "]":
-         no_bracket = True;
 
-   node_list = []
-   for node_range in s1.split("|"):
-      node_range1 = alias.unalias(node_range)
-      node_list.extend(parse_node_range(node_range1))
-   return node_list
+########################################################################
+def parse_node_range(string):
 
+    # No brackets
+    if string.count("[") == 0 and string.count("]") == 0:
+        ensure_name(string)
+        return [string]
+
+    # Brackets
+    if string.count("[") == 1 and string.count("]") == 1:
+        br1 = string.find("[")
+        br2 = string.find("]")
+
+        if br1 == 0 or br1 >= br2:
+            raise Exception("parse_node_range")
+
+        node_range = []
+        num_list = parse_num_list(string[br1+1:br2])
+        prepend = string[0:br1]
+        append = string[br2+1:]
+        ensure_name(prepend)
+        for char in append:
+            ensure_name_char(char)
+
+        for num in num_list:
+            node_range.append(prepend + num + append)
+        return node_range
+
+    # Wrong number of brackets
+    raise Exception("parse_node_range")
+
+
+########################################################################
+def parse_node_list(string):
+
+    # Replace node_range delimiter with |
+    # This is done because we can have a comma delimiter for 2 reasons
+    # Ex: node[1,3],headnode
+    # Comma delimits both "1,3" and node[1,3] from headnode
+    # In this example we change 2nd comma to |
+    # Ex: node[1,3],headnode -> node[1,3]|headnode
+    # This makes each delimiter unique in its usage
+    no_bracket = True
+    string1 = ""
+    for char in string:
+        if char == "," and no_bracket:
+            string1 += "|"
+        else:
+            string1 += char
+        if char == "[":
+            no_bracket = False
+        elif char == "]":
+            no_bracket = True
+
+    node_list = []
+    for node_range in string1.split("|"):
+        node_range1 = alias.unalias(node_range)
+        node_list.extend(parse_node_range(node_range1))
+    return node_list

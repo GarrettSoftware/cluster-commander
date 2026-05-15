@@ -1,9 +1,10 @@
+# pylint: disable=no-member
 import sys
 import test
 
 sys.path.append("../src")
-import run
-import util
+import run  # pylint: disable=import-error,wrong-import-position
+import util # pylint: disable=import-error,wrong-import-position
 
 
 ################################################################################
@@ -39,7 +40,7 @@ def test_print_output():
         "error" : False,
         "code"  : False,
         "debug" : False,
-        "space" : False }
+        "space" : False}
     args1 = {
         "color" : True,
         "error" : True,
@@ -92,7 +93,7 @@ def test_run_in_parallel():
     args = ("arg",)
     run.run_in_parallel(node_list_string, function, args)
     output = util.get_and_reset_print_buffer()
-    if output == "cn001 arg\ncn002 arg\n" or output == "cn002 arg\ncn001 arg\n":
+    if output in ("cn001 arg\ncn002 arg\n", "cn002 arg\ncn001 arg\n"):
         test.print_pass()
     else:
         test.print_fail()
@@ -110,4 +111,3 @@ if __name__ == "__main__":
     test_run_cmd()
     test_print_output()
     test_run_in_parallel()
-

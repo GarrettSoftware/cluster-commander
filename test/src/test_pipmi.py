@@ -1,10 +1,11 @@
+# pylint: disable=no-member
 import sys
 import test
 
 sys.path.append("../src")
-import pipmi
-import util
-import ipmi
+import pipmi  # pylint: disable=import-error,wrong-import-position
+import util   # pylint: disable=import-error,wrong-import-position
+import ipmi   # pylint: disable=import-error,wrong-import-position
 
 
 ################################################################################
@@ -40,4 +41,3 @@ if __name__ == "__main__":
 
     test_main()
     test_pipmi()
-
