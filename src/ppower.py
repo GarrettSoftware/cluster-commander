@@ -1,15 +1,15 @@
+import sys
 import args
 import run
 import ipmi
-import sys
 import util
 
 
 ################################################################################
-def ppower(node, args):
+def ppower(node, arglist):
 
     ipmi_command = ipmi.get_command(node)
-    args_command = args["extra"]
+    args_command = arglist["extra"]
 
     if args_command == "status":
         ipmi_command += " power status"
@@ -30,8 +30,8 @@ def ppower(node, args):
     if util.is_testing():
         util.print(ipmi_command)
     else:
-        out = run.run_cmd(ipmi_command, args["timeout"])
-        run.print_output(node, out, args)
+        out = run.run_cmd(ipmi_command, arglist["timeout"])
+        run.print_output(node, out, arglist)
 
 
 ################################################################################
@@ -47,12 +47,12 @@ def main(argv):
         "  reset:  turn off, then on; less of an off state than cycle\n" + \
         "  soft:   start OS shutdown"
 
-    args1 = args.parse(argv, desc, desc2)
+    util.catch_ctrl_c()
+    arglist = args.parse(argv, desc, desc2)
     ipmi.read_etc(util.get_root_dir() + "/etc/ipmi.txt")
-    run.run_in_parallel(args1["nodelist"], ppower, (args1,))
+    run.run_in_parallel(arglist["nodelist"], ppower, (arglist,))
 
 
 ################################################################################
 if __name__ == "__main__":
     main(sys.argv)
-

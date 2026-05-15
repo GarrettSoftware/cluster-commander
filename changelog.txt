@@ -1,0 +1,5 @@
+Vers  	Dev     	Changes
+--------------------------------------------------------------------------------
+1.2.0   K Garrett   - Handle Ctrl+C so it doesn't show a backtrace and just
+                      exits the program.
+                    - Add pylint tests.

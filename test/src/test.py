@@ -29,4 +29,3 @@ def print_fail(extra_info=""):
 def print_no_test(extra_info=""):
     testname = get_testname(extra_info)
     print(f"{testname} \033[1;33mNo Test\033[0m")
-

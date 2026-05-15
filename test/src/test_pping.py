@@ -1,9 +1,10 @@
+# pylint: disable=no-member
 import sys
 import test
 
 sys.path.append("../src")
-import pping
-import util
+import pping  # pylint: disable=import-error,wrong-import-position
+import util   # pylint: disable=import-error,wrong-import-position
 
 
 ################################################################################
@@ -38,4 +39,3 @@ if __name__ == "__main__":
 
     test_main()
     test_pping()
-

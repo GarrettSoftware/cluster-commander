@@ -1,16 +1,15 @@
-import os
-import socket
+# pylint: disable=no-member
 import sys
-import subprocess
 import test
 
 sys.path.append("../src")
-import args
-import util
+import args # pylint: disable=import-error,wrong-import-position
+import util # pylint: disable=import-error,wrong-import-position
 
 
 ########################################################################
 def test_parse():
+    # pylint: disable=too-many-branches,too-many-statements
 
     desc1 = "Desc1"
     desc2 = "Desc2"
@@ -30,8 +29,8 @@ def test_parse():
         arg = args.parse(argv, desc1, desc2)
         arg_gold = arg_default.copy()
         test.print_fail()
-    except SystemExit as e:
-        if e.code == 1:
+    except SystemExit as exc:
+        if exc.code == 1:
             test.print_pass("no nodelist")
         else:
             test.print_fail("no nodelist")
@@ -42,8 +41,8 @@ def test_parse():
         arg = args.parse(argv, desc1, desc2)
         arg_gold = arg_default.copy()
         test.print_fail()
-    except SystemExit as e:
-        if e.code == 1:
+    except SystemExit as exc:
+        if exc.code == 1:
             test.print_pass("unrecognized arg")
         else:
             test.print_fail("unrecognized arg")
@@ -85,8 +84,8 @@ def test_parse():
         test.print_fail("flags")
 
     # Check simple long flags
-    argv = ["command", "--space", "--error", 
-        "--code", "--debug", "--no-color", "nodelist"]
+    argv = ["command", "--space", "--error",
+            "--code", "--debug", "--no-color", "nodelist"]
     arg = args.parse(argv, desc1, desc2)
     arg_gold = arg_default.copy()
     arg_gold["nodelist"] = "nodelist"
@@ -140,9 +139,9 @@ def test_parse():
         arg = args.parse(argv, desc1, desc2)
         arg_gold = arg_default.copy()
         test.print_fail("version")
-    except SystemExit as e:
+    except SystemExit as exc:
         version = util.get_and_reset_print_buffer().strip()
-        if e.code == 0 and version.startswith("Cluster Commander: Version"):
+        if exc.code == 0 and version.startswith("Cluster Commander: Version"):
             test.print_pass("version")
         else:
             test.print_fail("version")
@@ -154,9 +153,9 @@ def test_parse():
         arg = args.parse(argv, desc1, desc2)
         arg_gold = arg_default.copy()
         test.print_fail("version")
-    except SystemExit as e:
+    except SystemExit as exc:
         version = util.get_and_reset_print_buffer().strip()
-        if e.code == 0 and version.startswith("Cluster Commander: Version"):
+        if exc.code == 0 and version.startswith("Cluster Commander: Version"):
             test.print_pass("version")
         else:
             test.print_fail("version")
@@ -168,9 +167,9 @@ def test_parse():
         arg = args.parse(argv, desc1, desc2)
         arg_gold = arg_default.copy()
         test.print_fail("help")
-    except SystemExit as e:
-        help = util.get_and_reset_print_buffer().strip()
-        if e.code == 0 and help.startswith("Desc1") and help.endswith("Desc2"):
+    except SystemExit as exc:
+        help1 = util.get_and_reset_print_buffer().strip()
+        if exc.code == 0 and help1.startswith("Desc1") and help1.endswith("Desc2"):
             test.print_pass("help")
         else:
             test.print_fail("help")
@@ -182,9 +181,9 @@ def test_parse():
         arg = args.parse(argv, desc1, desc2)
         arg_gold = arg_default.copy()
         test.print_fail("help")
-    except SystemExit as e:
-        help = util.get_and_reset_print_buffer().strip()
-        if e.code == 0 and help.startswith("Desc1") and help.endswith("Desc2"):
+    except SystemExit as exc:
+        help1 = util.get_and_reset_print_buffer().strip()
+        if exc.code == 0 and help1.startswith("Desc1") and help1.endswith("Desc2"):
             test.print_pass("help")
         else:
             test.print_fail("help")
@@ -196,7 +195,7 @@ def test_print_version():
     util.reset_print_buffer()
     args.print_version()
     version = util.get_and_reset_print_buffer()
-    version_gold = "  Cluster Commander: Version 1.1.0\n"
+    version_gold = "  Cluster Commander: Version 1.2.0\n"
 
     if version == version_gold:
         test.print_pass()
@@ -206,6 +205,7 @@ def test_print_version():
 
 ########################################################################
 def test_print_help():
+    # pylint: disable=too-many-statements
 
     help2a = "\n  Description 1\n"
     help3a = "\n  Description 1\n  Description 2\n"
@@ -273,13 +273,14 @@ def test_print_help():
 
 ########################################################################
 def test_parse_timeout():
+    # pylint: disable=too-many-branches,too-many-statements
 
     # Test 0 length string
     try:
         args.parse_timeout("")
         test.print_fail()
-    except SystemExit as e:
-        if e.code == 1:
+    except SystemExit as exc:
+        if exc.code == 1:
             test.print_pass()
         else:
             test.print_fail()
@@ -288,8 +289,8 @@ def test_parse_timeout():
     try:
         args.parse_timeout("a")
         test.print_fail()
-    except SystemExit as e:
-        if e.code == 1:
+    except SystemExit as exc:
+        if exc.code == 1:
             test.print_pass()
         else:
             test.print_fail()
@@ -298,8 +299,8 @@ def test_parse_timeout():
     try:
         args.parse_timeout("01234a")
         test.print_fail()
-    except SystemExit as e:
-        if e.code == 1:
+    except SystemExit as exc:
+        if exc.code == 1:
             test.print_pass()
         else:
             test.print_fail()
@@ -308,8 +309,8 @@ def test_parse_timeout():
     try:
         args.parse_timeout("0")
         test.print_fail()
-    except SystemExit as e:
-        if e.code == 1:
+    except SystemExit as exc:
+        if exc.code == 1:
             test.print_pass()
         else:
             test.print_fail()
@@ -318,8 +319,8 @@ def test_parse_timeout():
     try:
         args.parse_timeout("00000")
         test.print_fail()
-    except SystemExit as e:
-        if e.code == 1:
+    except SystemExit as exc:
+        if exc.code == 1:
             test.print_pass()
         else:
             test.print_fail()
@@ -352,4 +353,3 @@ if __name__ == "__main__":
     test_print_version()
     test_print_help()
     test_parse_timeout()
-
