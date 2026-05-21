@@ -13,7 +13,7 @@ def test_pcmd():
     args = {"extra" : "hostname"}
     pcmd.pcmd("cn001", args)
     cmd = util.get_and_reset_print_buffer()
-    cmd_gold = "ssh cn001 'hostname'\n"
+    cmd_gold = "ssh -o LogLevel=ERROR cn001 'hostname'\n"
     if cmd == cmd_gold:
         test.print_pass()
     else:
@@ -25,7 +25,7 @@ def test_main():
 
     pcmd.main(["pcmd", "cn001", "hostname"])
     cmd = util.get_and_reset_print_buffer()
-    cmd_gold = "ssh cn001 'hostname'\n"
+    cmd_gold = "ssh -o LogLevel=ERROR cn001 'hostname'\n"
     if cmd == cmd_gold:
         test.print_pass()
     else:

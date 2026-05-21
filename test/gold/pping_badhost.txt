@@ -1,1 +1,2 @@
+[1;31m[STDERR wh1][0m: ping: wh1: Name or service not known
 [1;32m[wh1][0m: no ping

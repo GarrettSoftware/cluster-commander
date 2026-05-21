@@ -20,7 +20,7 @@ def pipmi(node, arglist):
 ################################################################################
 def main(argv):
 
-    desc = "Usage: pipmi [OPTIONS] NODELIST COMMAND\n" + \
+    desc = "Usage: pipmi [OPTIONS] NODELIST [-EXNODELIST] COMMAND\n" + \
         "Run an IPMI command in parallel across several nodes"
     desc2 = "COMMAND:\n" + \
         "  The command to run across each node"
@@ -28,7 +28,8 @@ def main(argv):
     util.catch_ctrl_c()
     arglist = args.parse(argv, desc, desc2)
     ipmi.read_etc(util.get_root_dir() + "/etc/ipmi.txt")
-    run.run_in_parallel(arglist["nodelist"], pipmi, (arglist,))
+    run.run_in_parallel(
+        arglist["nodelist"], arglist["exnodelist"], pipmi, (arglist,))
 
 
 ################################################################################

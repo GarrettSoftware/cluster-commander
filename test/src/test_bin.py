@@ -43,15 +43,23 @@ def test_pcmd():
         test.print_fail("normal")
 
 
+    # Test no output
+    os.system("../bin/pcmd wh echo '' | sort > /tmp/cc.pcmd.no_output1")
+    if filecmp.cmp("/tmp/cc.pcmd.no_output1", "gold/pcmd_no_output.txt"):
+        test.print_pass("no output")
+    else:
+        test.print_fail("no output")
+
+
     # Test lots of flags
-    flags = "-s -e -c --nc"
+    flags = "-s -d --nc"
     os.system(f"../bin/pcmd {flags} wh hostname | sort > /tmp/cc.pcmd.flags1")
     if filecmp.cmp("/tmp/cc.pcmd.flags1", "gold/pcmd_flags.txt"):
         test.print_pass("flags")
     else:
         test.print_fail("flags")
 
-    flags = "--space --error --code --no-color"
+    flags = "--space --debug --no-color"
     os.system(f"../bin/pcmd {flags} wh hostname | sort > /tmp/cc.pcmd.flags2")
     if filecmp.cmp("/tmp/cc.pcmd.flags2", "gold/pcmd_flags.txt"):
         test.print_pass("flags")
@@ -120,14 +128,14 @@ def test_pipmi():
 
 
     # Test lots of flags
-    flags = "-s -e -c --nc"
+    flags = "-s -d --nc"
     os.system(f"../bin/pipmi {flags} wh power status | sort > /tmp/cc.pipmi.flags1")
     if filecmp.cmp("/tmp/cc.pipmi.flags1", "gold/pipmi_flags.txt"):
         test.print_pass("flags")
     else:
         test.print_fail("flags")
 
-    flags = "--space --error --code --no-color"
+    flags = "--space --debug --no-color"
     os.system(f"../bin/pipmi {flags} wh power status | sort > /tmp/cc.pipmi.flags2")
     if filecmp.cmp("/tmp/cc.pipmi.flags2", "gold/pipmi_flags.txt"):
         test.print_pass("flags")
@@ -204,14 +212,14 @@ def test_pping():
 
 
     # Test lots of flags
-    flags = "-s -e -c --nc"
+    flags = "-s -d --nc"
     os.system(f"../bin/pping {flags} wh | sort > /tmp/cc.pping.flags1")
     if filecmp.cmp("/tmp/cc.pping.flags1", "gold/pping_flags.txt"):
         test.print_pass("flags")
     else:
         test.print_fail("flags")
 
-    flags = "--space --error --code --no-color"
+    flags = "--space --debug --no-color"
     os.system(f"../bin/pping {flags} wh | sort > /tmp/cc.pping.flags2")
     if filecmp.cmp("/tmp/cc.pping.flags2", "gold/pping_flags.txt"):
         test.print_pass("flags")
@@ -265,14 +273,14 @@ def test_ppower():
 
 
     # Test lots of flags
-    flags = "-s -e -c --nc"
+    flags = "-s -d --nc"
     os.system(f"../bin/ppower {flags} wh status | sort > /tmp/cc.ppower.flags1")
     if filecmp.cmp("/tmp/cc.ppower.flags1", "gold/ppower_flags.txt"):
         test.print_pass("flags")
     else:
         test.print_fail("flags")
 
-    flags = "--space --error --code --no-color"
+    flags = "--space --debug --no-color"
     os.system(f"../bin/ppower {flags} wh status | sort > /tmp/cc.ppower.flags2")
     if filecmp.cmp("/tmp/cc.ppower.flags2", "gold/ppower_flags.txt"):
         test.print_pass("flags")

@@ -22,7 +22,7 @@ def run_cmd(cmd, timeout):
         code = proc.returncode
     except subprocess.TimeoutExpired:
         out = f"<timeout: {timeout}s>"
-        err = f"<timeout: {timeout}s>"
+        err = ""
         code = -1
 
     return (out, err, code, cmd)
@@ -42,12 +42,10 @@ def print_output(node, out, args):
     if not args["color"]:
         node_string = f"[{node}]"
         err_node_string = f"[STDERR {node}]"
-        code_node_string = f"[CODE {node}]"
         debug_node_string = f"[DEBUG {node}]"
     else:
         node_string = f"\033[1;32m[{node}]\033[0m"
         err_node_string = f"\033[1;31m[STDERR {node}]\033[0m"
-        code_node_string = f"\033[1;33m[CODE {node}]\033[0m"
         debug_node_string = f"\033[1;35m[DEBUG {node}]\033[0m"
 
     stdout = out[0]
@@ -56,15 +54,16 @@ def print_output(node, out, args):
     cmd = out[3]
 
     out1 = ""
-    for line in stdout.split("\n"):
-        out1 += f"{node_string}: {line}\n"
-    if args["error"]:
+    if args["debug"]:
+        out1 += f"{debug_node_string}:  CMD: {cmd}  CODE: {code}\n"
+    if stderr != "":
         for line in stderr.split("\n"):
             out1 += f"{err_node_string}: {line}\n"
-    if args["code"]:
-        out1 += f"{code_node_string}: {code}\n"
-    if args["debug"]:
-        out1 += f"{debug_node_string}: {cmd}\n"
+    if stdout == "":
+        out1 += f"{node_string}: <no output>\n"
+    else:
+        for line in stdout.split("\n"):
+            out1 += f"{node_string}: {line}\n"
     if not args["space"]:
         out1 = out1.strip()
 
@@ -73,9 +72,16 @@ def print_output(node, out, args):
 
 
 ################################################################################
-def run_in_parallel(node_list_string, function, args):
+def run_in_parallel(node_list_string, ex_node_list_string, function, args):
 
     node_list = parse.parse_node_list(node_list_string)
+    if ex_node_list_string != "":
+        ex_node_list = parse.parse_node_list(ex_node_list_string)
+        for node in ex_node_list:
+            if node in node_list:
+                node_list.remove(node)
+            else:
+                util.print(f"Warning: exclude node [{node}] not in nodelist")
 
     threadlist = []
     for node in node_list:

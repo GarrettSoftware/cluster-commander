@@ -1,18 +1,16 @@
 
-  Usage: ppower [OPTIONS] NODELIST COMMAND
+  Usage: ppower [OPTIONS] NODELIST [-EXNODELIST] COMMAND
   Run an IPMI power command in parallel across several nodes
 
   OPTIONS:
     -h,   --help              Print this help message
     -v,   --version           Print version
     -s,   --space             Add space between each hosts' output
-    -e,   --error             Print standard error
-    -c,   --code              Print return code
     -d,   --debug             Print command run by this program
     --nc, --no-color          Do not print in color
     -t,   --timeout=TIMEOUT   Set timeout in seconds (default: None)
 
-  NODELIST:
+  NODELIST / EXNODELIST:
     Comma separated list of nodes, node ranges, and aliases.
     An alias allows you to aggregate nodes into a single name
     such as nodes meaning node[01-10].

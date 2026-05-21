@@ -22,12 +22,11 @@ def parse(argv, description, description2=""):
     # Ex: pcmd n1 hostname -s; extra = "hostname -s"
     args = {
         "space" : False,
-        "error" : False,
-        "code" : False,
         "debug" : False,
         "color" : True,
         "timeout" : None,
         "nodelist" : "",
+        "exnodelist" : "",
         "extra" : ""}
 
     state = "dashes"
@@ -50,10 +49,6 @@ def parse(argv, description, description2=""):
                 sys.exit(0)
             elif arg in ('-s', '--space'):
                 args['space'] = True
-            elif arg in ('-e', '--error'):
-                args['error'] = True
-            elif arg in ('-c', '--code'):
-                args['code'] = True
             elif arg in ('-d', '--debug'):
                 args['debug'] = True
             elif arg in ('--nc', '--no-color'):
@@ -69,11 +64,14 @@ def parse(argv, description, description2=""):
             elif arg[0:10] == '--timeout=':
                 args['timeout'] = parse_timeout(arg[10:])
             elif arg[0:1] == '-':
-                util.print(f"Error: Unrecognized argument {args}")
+                util.print(f"Error: Unrecognized argument: {arg}")
                 sys.exit(1)
             else:
                 state = "extra"
                 args["nodelist"] = arg
+                if len(argv) > i+1 and argv[i+1][0:1] == "-":
+                    args["exnodelist"] = argv[i+1][1:]
+                    skip_next_arg = True
         elif state == "extra":
             args["extra"] += arg + " "
 
@@ -112,13 +110,11 @@ def print_help(description, description2):
     util.print("    -h,   --help              Print this help message")
     util.print("    -v,   --version           Print version")
     util.print("    -s,   --space             Add space between each hosts' output")
-    util.print("    -e,   --error             Print standard error")
-    util.print("    -c,   --code              Print return code")
     util.print("    -d,   --debug             Print command run by this program")
     util.print("    --nc, --no-color          Do not print in color")
     util.print("    -t,   --timeout=TIMEOUT   Set timeout in seconds (default: None)")
     util.print("")
-    util.print("  NODELIST:")
+    util.print("  NODELIST / EXNODELIST:")
     util.print("    Comma separated list of nodes, node ranges, and aliases.")
     util.print("    An alias allows you to aggregate nodes into a single name")
     util.print("    such as nodes meaning node[01-10].")

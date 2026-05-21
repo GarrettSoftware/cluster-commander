@@ -8,7 +8,7 @@ import util
 def pcmd(node, arglist):
 
     cmd = arglist["extra"]
-    pcmd_command = f"ssh {node} '{cmd}'"
+    pcmd_command = f"ssh -o LogLevel=ERROR {node} '{cmd}'"
     if util.is_testing():
         util.print(pcmd_command)
     else:
@@ -19,14 +19,15 @@ def pcmd(node, arglist):
 ################################################################################
 def main(argv):
 
-    desc = "Usage: pcmd [OPTIONS] NODELIST COMMAND\n" + \
+    desc = "Usage: pcmd [OPTIONS] NODELIST [-EXNODELIST] COMMAND\n" + \
         "Run a command in parallel across several nodes using ssh"
     desc2 = "COMMAND:\n" + \
         "  The command to run across each node"
 
     util.catch_ctrl_c()
     arglist = args.parse(argv, desc, desc2)
-    run.run_in_parallel(arglist["nodelist"], pcmd, (arglist,))
+    run.run_in_parallel(
+        arglist["nodelist"], arglist["exnodelist"], pcmd, (arglist,))
 
 
 ################################################################################
