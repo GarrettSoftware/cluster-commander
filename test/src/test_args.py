@@ -193,68 +193,7 @@ def test_print_version():
 
 ########################################################################
 def test_print_help():
-    # pylint: disable=too-many-statements
-
-    help2a = "\n  Description 1\n"
-    help3a = "\n  Description 1\n  Description 2\n"
-
-    help2b = "\n"
-    help2b += "  OPTIONS:\n"
-    help2b += "    -h,   --help              Print this help message\n"
-    help2b += "    -v,   --version           Print version\n"
-    help2b += "    -s,   --space             Add space between each hosts' output\n"
-    help2b += "    -d,   --debug             Print command run by this program\n"
-    help2b += "    --nc, --no-color          Do not print in color\n"
-    help2b += "    -t,   --timeout=TIMEOUT   Set timeout in seconds (default: None)\n"
-    help2b += "\n"
-    help2b += "  NODELIST / EXNODELIST:\n"
-    help2b += "    Comma separated list of nodes, node ranges, and aliases.\n"
-    help2b += "    An alias allows you to aggregate nodes into a single name\n"
-    help2b += "    such as nodes meaning node[01-10].\n"
-    help2b += "    Aliases are specified in the etc/alias.txt file.\n"
-    help2b += "\n"
-    help2b += "    Examples:\n"
-    help2b += "      node1,node2,node3,node5,node6,node7\n"
-    help2b += "      node[1-3],node[5-7]\n"
-    help2b += "      node[1-3,5-7]\n"
-    help2b += "      node[01-10]\n"
-    help2b += "      nodes\n"
-    help2b += "\n"
-
-    help2c = "  Description 2\n\n"
-    help3c = "  Description 3\n  Description 4\n\n"
-
-    # Test single line description 1, no description 2
-    args.print_help("Description 1", "")
-    help1 = util.get_and_reset_print_buffer()
-    if help1 == help2a + help2b:
-        test.print_pass()
-    else:
-        test.print_fail()
-
-    # Test multi line description 1, no description 2
-    args.print_help("Description 1\nDescription 2", "")
-    help1 = util.get_and_reset_print_buffer()
-    if help1 == help3a + help2b:
-        test.print_pass()
-    else:
-        test.print_fail()
-
-    # Test single line description 1, single line description 2
-    args.print_help("Description 1", "Description 2")
-    help1 = util.get_and_reset_print_buffer()
-    if help1 == help2a + help2b + help2c:
-        test.print_pass()
-    else:
-        test.print_fail()
-
-    # Test multi line description 1, multi line description 2
-    args.print_help("Description 1\nDescription 2", "Description 3\nDescription 4")
-    help1 = util.get_and_reset_print_buffer()
-    if help1 == help3a + help2b + help3c:
-        test.print_pass()
-    else:
-        test.print_fail()
+    test.print_no_test("Tested with test_bin.sh")
 
 
 ########################################################################

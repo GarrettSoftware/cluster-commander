@@ -6,9 +6,10 @@
 #   (whitespace)* (comment)?
 #   (whitespace)* name1 (whitespace)+ name2 (whitespace)* (comment)?
 #   name1 = (alpha)(alpha OR num OR '-' OR '_')*
-#   name2 = (alpha)(alpha OR num OR '-' OR '_' OR '[' OR ']')*
+#   name2 = (alpha)(alpha OR num OR '-' OR '_' OR ',' OR '[' OR ']')*
 #
-# If a line does not conform to a recognized format, it is skipped
+# If a line does not conform to a recognized format, it is skipped.
+# Strict format checking occurs in parse.py.
 ########################################################################
 import util
 
@@ -69,6 +70,6 @@ def ensure_name2(string):
     if not string[0].isalpha():
         return False
     for i in range(1, len(string)):
-        if not string[i].isalnum() and not string[i] in "-_[]":
+        if not string[i].isalnum() and not string[i] in "-_,[]":
             return False
     return True

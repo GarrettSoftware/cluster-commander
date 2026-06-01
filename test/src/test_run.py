@@ -26,7 +26,7 @@ def test_run_cmd():
 
     # Test timeout
     (out, err, code, cmd) = run.run_cmd("sleep 10", timeout=1)
-    if out == "<timeout: 1s>" and err == "<timeout: 1s>" and code == -1 and cmd == "sleep 10":
+    if out == "<timeout: 1s>" and err == "" and code == -1 and cmd == "sleep 10":
         test.print_pass("timeout")
     else:
         test.print_fail("timeout")

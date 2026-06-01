@@ -7,3 +7,4 @@ Vers  	Dev     	Changes
 1.3.0   K Garrett   - Add ability to exclude nodes.
                     - Don't show ssh banner on login.
 					- Show stderr by default if it isn't blank.
+					- Fix alias file not accepting a comma delimited list.
