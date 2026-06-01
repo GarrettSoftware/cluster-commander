@@ -59,9 +59,9 @@ def print_output(node, out, args):
     if stderr != "":
         for line in stderr.split("\n"):
             out1 += f"{err_node_string}: {line}\n"
-    if stdout == "":
+    if stdout == "" and stderr == "":
         out1 += f"{node_string}: <no output>\n"
-    else:
+    elif stdout != "":
         for line in stdout.split("\n"):
             out1 += f"{node_string}: {line}\n"
     if not args["space"]:
