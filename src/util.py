@@ -82,6 +82,4 @@ def catch_ctrl_c():
 
 ################################################################################
 def ctrl_c_signal(sig, frame): # pylint: disable=unused-argument
-    print("Exiting...")
-    set_no_print()
-    sys.exit(100)
+    raise KeyboardInterrupt()

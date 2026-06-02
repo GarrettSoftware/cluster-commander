@@ -90,5 +90,15 @@ def run_in_parallel(node_list_string, ex_node_list_string, function, args):
         thread.start()
         threadlist.append(thread)
 
-    for thread in threadlist:
-        thread.join()
+    # Ctrl+C causes the KeyboardInterrupt exception from util.catch_ctrl_c
+    # Ctrl+C also sends a signal to every subprocess.run, so the threads should
+    # finish quickly.
+    # time.sleep is used to give time to finish printing to terminal
+    try:
+        for thread in threadlist:
+            thread.join()
+    except KeyboardInterrupt:
+        util.print("\nQuitting ...")
+        for thread in threadlist:
+            thread.join()
+        time.sleep(0.5)
