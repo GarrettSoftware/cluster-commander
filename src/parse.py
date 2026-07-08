@@ -118,15 +118,15 @@ def parse_node_range(string):
 
 
 ########################################################################
-def parse_node_list(string):
-
-    # Replace node_range delimiter with |
-    # This is done because we can have a comma delimiter for 2 reasons
-    # Ex: node[1,3],headnode
-    # Comma delimits both "1,3" and node[1,3] from headnode
-    # In this example we change 2nd comma to |
-    # Ex: node[1,3],headnode -> node[1,3]|headnode
-    # This makes each delimiter unique in its usage
+# Replace node_range delimiter with |
+# This is done because we can have a comma delimiter for 2 reasons
+# Ex: node[1,3],headnode
+# Comma delimits both "1,3" and node[1,3] from headnode
+# In this example we change 2nd comma to |
+# Ex: node[1,3],headnode -> node[1,3]|headnode
+# This makes each delimiter unique in its usage
+########################################################################
+def comma_to_bar_delimiter(string):
     no_bracket = True
     string1 = ""
     for char in string:
@@ -138,9 +138,23 @@ def parse_node_list(string):
             no_bracket = False
         elif char == "]":
             no_bracket = True
+    return string1
+
+
+########################################################################
+# Read the comment for comma_to_bar_delimiter.
+########################################################################
+def parse_node_list(node_string):
+
+    node_string = comma_to_bar_delimiter(node_string)
+    node_string_unaliased = ""
+    for token in node_string.split("|"):
+        token_unaliased = alias.unalias(token)
+        node_string_unaliased += "|" + comma_to_bar_delimiter(token_unaliased)
+
+    node_string_unaliased = node_string_unaliased[1:]
 
     node_list = []
-    for node_range in string1.split("|"):
-        node_range1 = alias.unalias(node_range)
-        node_list.extend(parse_node_range(node_range1))
+    for token in node_string_unaliased.split("|"):
+        node_list.extend(parse_node_range(token))
     return node_list

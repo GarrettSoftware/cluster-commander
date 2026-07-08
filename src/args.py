@@ -12,22 +12,22 @@ import util
 #
 # Return:
 #   args         - Returns a dictionary of all argument possibilities,
-#                  the nodelist, and any extra arguments as one string.
+#                  the nodelist/exnodelist, and any extra arguments
+#                  as one string.
 ################################################################################
 def parse(argv, description, description2=""):
     # pylint: disable=too-many-branches
 
     # Default arguments meant for interactive session
-    # extra is the parameters after the nodelist
+    # extra is the parameters after the nodelist/exnodelist
     # Ex: pcmd n1 hostname -s; extra = "hostname -s"
     args = {
         "space" : False,
-        "error" : False,
-        "code" : False,
         "debug" : False,
         "color" : True,
         "timeout" : None,
         "nodelist" : "",
+        "exnodelist" : "",
         "extra" : ""}
 
     state = "dashes"
@@ -50,30 +50,32 @@ def parse(argv, description, description2=""):
                 sys.exit(0)
             elif arg in ('-s', '--space'):
                 args['space'] = True
-            elif arg in ('-e', '--error'):
-                args['error'] = True
-            elif arg in ('-c', '--code'):
-                args['code'] = True
             elif arg in ('-d', '--debug'):
                 args['debug'] = True
             elif arg in ('--nc', '--no-color'):
                 args['color'] = False
-            elif arg == '-t':
+            elif arg == '-t':   # -t with space after it
                 if len(argv) < i+2:
                     util.print("Error: Timeout flag with no value given")
                     sys.exit(1)
                 args['timeout'] = parse_timeout(argv[i+1])
                 skip_next_arg = True
-            elif arg[0:2] == '-t':
+            elif arg[0:2] == '-t':  # -t with number immediately following
                 args['timeout'] = parse_timeout(arg[2:])
             elif arg[0:10] == '--timeout=':
                 args['timeout'] = parse_timeout(arg[10:])
             elif arg[0:1] == '-':
-                util.print(f"Error: Unrecognized argument {args}")
+                util.print(f"Error: Unrecognized argument: {arg}")
                 sys.exit(1)
+            # Must be done with flags (options)
+            # Now parse nodelist and exnodelist
             else:
                 state = "extra"
                 args["nodelist"] = arg
+                # Check for exnodelist
+                if len(argv) > i+1 and argv[i+1][0:1] == "-":
+                    args["exnodelist"] = argv[i+1][1:]
+                    skip_next_arg = True
         elif state == "extra":
             args["extra"] += arg + " "
 
@@ -111,17 +113,15 @@ def print_help(description, description2):
     util.print("  OPTIONS:")
     util.print("    -h,   --help              Print this help message")
     util.print("    -v,   --version           Print version")
-    util.print("    -s,   --space             Add space between each hosts' output")
-    util.print("    -e,   --error             Print standard error")
-    util.print("    -c,   --code              Print return code")
+    util.print("    -s,   --space             Add space between each host's output")
     util.print("    -d,   --debug             Print command run by this program")
     util.print("    --nc, --no-color          Do not print in color")
     util.print("    -t,   --timeout=TIMEOUT   Set timeout in seconds (default: None)")
     util.print("")
     util.print("  NODELIST:")
     util.print("    Comma separated list of nodes, node ranges, and aliases.")
-    util.print("    An alias allows you to aggregate nodes into a single name")
-    util.print("    such as nodes meaning node[01-10].")
+    util.print("    An alias allows you to aggregate node names into a single name")
+    util.print("    such as nodes = node[01-10].")
     util.print("    Aliases are specified in the etc/alias.txt file.")
     util.print("")
     util.print("    Examples:")
@@ -130,6 +130,13 @@ def print_help(description, description2):
     util.print("      node[1-3,5-7]")
     util.print("      node[01-10]")
     util.print("      nodes")
+    util.print("")
+    util.print("  EXNODELIST:")
+    util.print("    To exclude nodes, specify a nodelist and then write a")
+    util.print("    minus sign followed by a nodelist to exclude.")
+    util.print("")
+    util.print("    Example:")
+    util.print("      node[01-10] -node[03-05]")
 
     if description2 != "":
         util.print("")

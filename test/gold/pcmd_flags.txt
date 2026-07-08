@@ -8,26 +8,16 @@
 
 
 
-[CODE wh001]: 0
-[CODE wh002]: 0
-[CODE wh003]: 0
-[CODE wh004]: 0
-[CODE wh005]: 0
-[CODE wh006]: 0
-[CODE wh007]: 0
-[CODE wh008]: 0
-[CODE wh009]: 0
-[CODE wh010]: 0
-[STDERR wh001]: 
-[STDERR wh002]: 
-[STDERR wh003]: 
-[STDERR wh004]: 
-[STDERR wh005]: 
-[STDERR wh006]: 
-[STDERR wh007]: 
-[STDERR wh008]: 
-[STDERR wh009]: 
-[STDERR wh010]: 
+[DEBUG wh001]:  CMD: ssh -o LogLevel=ERROR wh001 'hostname'  CODE: 0
+[DEBUG wh002]:  CMD: ssh -o LogLevel=ERROR wh002 'hostname'  CODE: 0
+[DEBUG wh003]:  CMD: ssh -o LogLevel=ERROR wh003 'hostname'  CODE: 0
+[DEBUG wh004]:  CMD: ssh -o LogLevel=ERROR wh004 'hostname'  CODE: 0
+[DEBUG wh005]:  CMD: ssh -o LogLevel=ERROR wh005 'hostname'  CODE: 0
+[DEBUG wh006]:  CMD: ssh -o LogLevel=ERROR wh006 'hostname'  CODE: 0
+[DEBUG wh007]:  CMD: ssh -o LogLevel=ERROR wh007 'hostname'  CODE: 0
+[DEBUG wh008]:  CMD: ssh -o LogLevel=ERROR wh008 'hostname'  CODE: 0
+[DEBUG wh009]:  CMD: ssh -o LogLevel=ERROR wh009 'hostname'  CODE: 0
+[DEBUG wh010]:  CMD: ssh -o LogLevel=ERROR wh010 'hostname'  CODE: 0
 [wh001]: wh001.hpc.bell
 [wh002]: wh002.hpc.bell
 [wh003]: wh003.hpc.bell

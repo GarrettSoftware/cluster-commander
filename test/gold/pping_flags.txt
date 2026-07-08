@@ -8,26 +8,16 @@
 
 
 
-[CODE wh001]: 0
-[CODE wh002]: 0
-[CODE wh003]: 0
-[CODE wh004]: 0
-[CODE wh005]: 0
-[CODE wh006]: 0
-[CODE wh007]: 0
-[CODE wh008]: 0
-[CODE wh009]: 0
-[CODE wh010]: 0
-[STDERR wh001]: 
-[STDERR wh002]: 
-[STDERR wh003]: 
-[STDERR wh004]: 
-[STDERR wh005]: 
-[STDERR wh006]: 
-[STDERR wh007]: 
-[STDERR wh008]: 
-[STDERR wh009]: 
-[STDERR wh010]: 
+[DEBUG wh001]:  CMD: ping -c 1 wh001  CODE: 0
+[DEBUG wh002]:  CMD: ping -c 1 wh002  CODE: 0
+[DEBUG wh003]:  CMD: ping -c 1 wh003  CODE: 0
+[DEBUG wh004]:  CMD: ping -c 1 wh004  CODE: 0
+[DEBUG wh005]:  CMD: ping -c 1 wh005  CODE: 0
+[DEBUG wh006]:  CMD: ping -c 1 wh006  CODE: 0
+[DEBUG wh007]:  CMD: ping -c 1 wh007  CODE: 0
+[DEBUG wh008]:  CMD: ping -c 1 wh008  CODE: 0
+[DEBUG wh009]:  CMD: ping -c 1 wh009  CODE: 0
+[DEBUG wh010]:  CMD: ping -c 1 wh010  CODE: 0
 [wh001]: ping
 [wh002]: ping
 [wh003]: ping

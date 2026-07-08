@@ -37,7 +37,7 @@ def ppower(node, arglist):
 ################################################################################
 def main(argv):
 
-    desc = "Usage: ppower [OPTIONS] NODELIST COMMAND\n" + \
+    desc = "Usage: ppower [OPTIONS] NODELIST [-EXNODELIST] COMMAND\n" + \
         "Run an IPMI power command in parallel across several nodes"
     desc2 = "COMMAND can be any of the following:\n" + \
         "  status: get power status\n" + \
@@ -50,7 +50,8 @@ def main(argv):
     util.catch_ctrl_c()
     arglist = args.parse(argv, desc, desc2)
     ipmi.read_etc(util.get_root_dir() + "/etc/ipmi.txt")
-    run.run_in_parallel(arglist["nodelist"], ppower, (arglist,))
+    run.run_in_parallel(
+        arglist["nodelist"], arglist["exnodelist"], ppower, (arglist,))
 
 
 ################################################################################

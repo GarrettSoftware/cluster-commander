@@ -22,12 +22,13 @@ def pping(node, arglist):
 ################################################################################
 def main(argv):
 
-    desc = "Usage: pping [OPTIONS] NODELIST\n" + \
+    desc = "Usage: pping [OPTIONS] NODELIST [-EXNODELIST]\n" + \
         "Run ping in parallel across several nodes"
 
     util.catch_ctrl_c()
     arglist = args.parse(argv, desc)
-    run.run_in_parallel(arglist["nodelist"], pping, (arglist,))
+    run.run_in_parallel(
+        arglist["nodelist"], arglist["exnodelist"], pping, (arglist,))
 
 
 ################################################################################

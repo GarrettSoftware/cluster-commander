@@ -1,21 +1,19 @@
 
-  Usage: pcmd [OPTIONS] NODELIST COMMAND
+  Usage: pcmd [OPTIONS] NODELIST [-EXNODELIST] COMMAND
   Run a command in parallel across several nodes using ssh
 
   OPTIONS:
     -h,   --help              Print this help message
     -v,   --version           Print version
-    -s,   --space             Add space between each hosts' output
-    -e,   --error             Print standard error
-    -c,   --code              Print return code
+    -s,   --space             Add space between each host's output
     -d,   --debug             Print command run by this program
     --nc, --no-color          Do not print in color
     -t,   --timeout=TIMEOUT   Set timeout in seconds (default: None)
 
   NODELIST:
     Comma separated list of nodes, node ranges, and aliases.
-    An alias allows you to aggregate nodes into a single name
-    such as nodes meaning node[01-10].
+    An alias allows you to aggregate node names into a single name
+    such as nodes = node[01-10].
     Aliases are specified in the etc/alias.txt file.
 
     Examples:
@@ -24,6 +22,13 @@
       node[1-3,5-7]
       node[01-10]
       nodes
+
+  EXNODELIST:
+    To exclude nodes, specify a nodelist and then write a
+    minus sign followed by a nodelist to exclude.
+
+    Example:
+      node[01-10] -node[03-05]
 
   COMMAND:
     The command to run across each node

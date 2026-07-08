@@ -8,26 +8,16 @@
 
 
 
-[CODE wh001]: 0
-[CODE wh002]: 0
-[CODE wh003]: 0
-[CODE wh004]: 0
-[CODE wh005]: 0
-[CODE wh006]: 0
-[CODE wh007]: 0
-[CODE wh008]: 0
-[CODE wh009]: 0
-[CODE wh010]: 0
-[STDERR wh001]: 
-[STDERR wh002]: 
-[STDERR wh003]: 
-[STDERR wh004]: 
-[STDERR wh005]: 
-[STDERR wh006]: 
-[STDERR wh007]: 
-[STDERR wh008]: 
-[STDERR wh009]: 
-[STDERR wh010]: 
+[DEBUG wh001]:  CMD: ipmitool -C 17 -I lanplus -H wh001-ipmi -U root -P Cluster1! power status  CODE: 0
+[DEBUG wh002]:  CMD: ipmitool -C 17 -I lanplus -H wh002-ipmi -U root -P Cluster1! power status  CODE: 0
+[DEBUG wh003]:  CMD: ipmitool -C 17 -I lanplus -H wh003-ipmi -U root -P Cluster1! power status  CODE: 0
+[DEBUG wh004]:  CMD: ipmitool -C 17 -I lanplus -H wh004-ipmi -U root -P Cluster1! power status  CODE: 0
+[DEBUG wh005]:  CMD: ipmitool -C 17 -I lanplus -H wh005-ipmi -U root -P Cluster1! power status  CODE: 0
+[DEBUG wh006]:  CMD: ipmitool -C 17 -I lanplus -H wh006-ipmi -U root -P Cluster1! power status  CODE: 0
+[DEBUG wh007]:  CMD: ipmitool -C 17 -I lanplus -H wh007-ipmi -U root -P Cluster1! power status  CODE: 0
+[DEBUG wh008]:  CMD: ipmitool -C 17 -I lanplus -H wh008-ipmi -U root -P Cluster1! power status  CODE: 0
+[DEBUG wh009]:  CMD: ipmitool -C 17 -I lanplus -H wh009-ipmi -U root -P Cluster1! power status  CODE: 0
+[DEBUG wh010]:  CMD: ipmitool -C 17 -I lanplus -H wh010-ipmi -U root -P Cluster1! power status  CODE: 0
 [wh001]: Chassis Power is on
 [wh002]: Chassis Power is on
 [wh003]: Chassis Power is on

@@ -3,3 +3,9 @@ Vers  	Dev     	Changes
 1.2.0   K Garrett   - Handle Ctrl+C so it doesn't show a backtrace and just
                       exits the program.
                     - Add pylint tests.
+
+1.3.0   K Garrett   - Add ability to exclude nodes.
+                    - Don't show ssh banner on login.
+                    - Show stderr by default if it isn't blank.
+                    - Fix alias file not accepting a comma delimited list.
+                    - Print nodes that don't finish from Ctrl+C.
