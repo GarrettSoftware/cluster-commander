@@ -23,6 +23,8 @@ elif [[ $CMD == "pping" ]]; then
     $PYTHON3 -B $ROOTDIR/src/$CMD.py "$@"
 elif [[ $CMD == "ppower" ]]; then
     $PYTHON3 -B $ROOTDIR/src/$CMD.py "$@"
+elif [[ $CMD == "psudo" ]]; then
+    $PYTHON3 -B $ROOTDIR/src/$CMD.py "$@"
 else
     echo "Error: run.sh did not recognize command"
     exit 1

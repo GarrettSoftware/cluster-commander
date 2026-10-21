@@ -11,12 +11,12 @@ PRINT_LOCK = threading.Lock()
 # Run a command on the terminal and return:
 #    stdout, stderr, and the return code
 ################################################################################
-def run_cmd(cmd, timeout):
+def run_cmd(cmd, timeout, stdin=""):
 
     try:
         proc = subprocess.run(
             cmd, capture_output=True, shell=True,
-            timeout=timeout, check=False)
+            timeout=timeout, check=False, input=stdin.encode("utf-8"))
         out = proc.stdout.decode('utf-8', errors='ignore').strip()
         err = proc.stderr.decode('utf-8', errors='ignore').strip()
         code = proc.returncode
