@@ -9,6 +9,8 @@
     -d,   --debug             Print command run by this program
     --nc, --no-color          Do not print in color
     -t,   --timeout=TIMEOUT   Set timeout in seconds (default: None)
+    --root                    Print root directory of application
+    --alias                   Print the etc/alias.txt file
 
   NODELIST:
     Comma separated list of nodes, node ranges, and aliases.

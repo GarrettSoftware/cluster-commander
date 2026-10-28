@@ -4,35 +4,61 @@ import filecmp
 
 
 ################################################################################
-def test_pcmd():
+def test_common(cmd):
     # pylint: disable=too-many-branches,too-many-statements
 
     # Test help
-    os.system("../bin/pcmd -h > /tmp/cc.pcmd.help1")
-    if filecmp.cmp("/tmp/cc.pcmd.help1", "gold/pcmd_help.txt"):
+    os.system(f"../bin/{cmd} -h > /tmp/cc.{cmd}.help1")
+    if filecmp.cmp(f"/tmp/cc.{cmd}.help1", f"gold/{cmd}_help.txt"):
         test.print_pass("help")
     else:
         test.print_fail("help")
 
-    os.system("../bin/pcmd --help > /tmp/cc.pcmd.help2")
-    if filecmp.cmp("/tmp/cc.pcmd.help2", "gold/pcmd_help.txt"):
+    os.system(f"../bin/{cmd} --help > /tmp/cc.{cmd}.help2")
+    if filecmp.cmp(f"/tmp/cc.{cmd}.help2", f"gold/{cmd}_help.txt"):
         test.print_pass("help")
     else:
         test.print_fail("help")
 
 
     # Test version
-    os.system("../bin/pcmd -v > /tmp/cc.pcmd.version1")
-    if filecmp.cmp("/tmp/cc.pcmd.version1", "gold/version.txt"):
+    os.system(f"../bin/{cmd} -v > /tmp/cc.{cmd}.version1")
+    if filecmp.cmp(f"/tmp/cc.{cmd}.version1", "gold/version.txt"):
         test.print_pass("version")
     else:
         test.print_fail("version")
 
-    os.system("../bin/pcmd --version > /tmp/cc.pcmd.version2")
-    if filecmp.cmp("/tmp/cc.pcmd.version2", "gold/version.txt"):
+    os.system(f"../bin/{cmd} --version > /tmp/cc.{cmd}.version2")
+    if filecmp.cmp(f"/tmp/cc.{cmd}.version2", "gold/version.txt"):
         test.print_pass("version")
     else:
         test.print_fail("version")
+
+
+    # Test root
+    os.system(f"../bin/{cmd} --root > /tmp/cc.{cmd}.root")
+    if filecmp.cmp(f"/tmp/cc.{cmd}.root", "gold/root.txt"):
+        test.print_pass("root")
+    else:
+        test.print_fail("root")
+
+
+    # Test alias
+    # Only testing top line so we don't put production machine names
+    # in repo
+    os.system(f"../bin/{cmd} --alias | head -n 1 > /tmp/cc.{cmd}.alias")
+    if filecmp.cmp(f"/tmp/cc.{cmd}.alias", "gold/alias.txt"):
+        test.print_pass("alias")
+    else:
+        test.print_fail("alias")
+
+
+################################################################################
+def test_pcmd():
+    # pylint: disable=too-many-branches,too-many-statements
+
+    # Test common flags
+    test_common("pcmd")
 
 
     # Test normal call
@@ -88,35 +114,33 @@ def test_pcmd():
 
 
 ################################################################################
+def test_psudo():
+    # pylint: disable=too-many-branches,too-many-statements
+
+    # Test common flags
+    test_common("psudo")
+
+
+    # Test normal call
+    os.system("../bin/psudo hpcnet,hpcdev hostname | sort > /tmp/cc.psudo.normal1")
+    if filecmp.cmp("/tmp/cc.psudo.normal1", "gold/psudo_hostname.txt"):
+        test.print_pass("normal")
+    else:
+        test.print_fail("normal")
+
+
+    # Only test normal call to save tester on inputting password
+    test.print_no_test("no output")
+    test.print_no_test("flags")
+    test.print_no_test("timeout")
+
+
+################################################################################
 def test_pipmi():
     # pylint: disable=too-many-branches,too-many-statements
 
-    # Test help
-    os.system("../bin/pipmi -h > /tmp/cc.pipmi.help1")
-    if filecmp.cmp("/tmp/cc.pipmi.help1", "gold/pipmi_help.txt"):
-        test.print_pass("help")
-    else:
-        test.print_fail("help")
-
-    os.system("../bin/pipmi --help > /tmp/cc.pipmi.help2")
-    if filecmp.cmp("/tmp/cc.pipmi.help2", "gold/pipmi_help.txt"):
-        test.print_pass("help")
-    else:
-        test.print_fail("help")
-
-
-    # Test version
-    os.system("../bin/pipmi -v > /tmp/cc.pipmi.version1")
-    if filecmp.cmp("/tmp/cc.pipmi.version1", "gold/version.txt"):
-        test.print_pass("version")
-    else:
-        test.print_fail("version")
-
-    os.system("../bin/pipmi --version > /tmp/cc.pipmi.version2")
-    if filecmp.cmp("/tmp/cc.pipmi.version2", "gold/version.txt"):
-        test.print_pass("version")
-    else:
-        test.print_fail("version")
+    # Test common flags
+    test_common("pipmi")
 
 
     # Test normal call
@@ -167,32 +191,8 @@ def test_pipmi():
 def test_pping():
     # pylint: disable=too-many-branches
 
-    # Test help
-    os.system("../bin/pping -h > /tmp/cc.pping.help1")
-    if filecmp.cmp("/tmp/cc.pping.help1", "gold/pping_help.txt"):
-        test.print_pass("help")
-    else:
-        test.print_fail("help")
-
-    os.system("../bin/pping --help > /tmp/cc.pping.help2")
-    if filecmp.cmp("/tmp/cc.pping.help2", "gold/pping_help.txt"):
-        test.print_pass("help")
-    else:
-        test.print_fail("help")
-
-
-    # Test version
-    os.system("../bin/pping -v > /tmp/cc.pping.version1")
-    if filecmp.cmp("/tmp/cc.pping.version1", "gold/version.txt"):
-        test.print_pass("version")
-    else:
-        test.print_fail("version")
-
-    os.system("../bin/pping --version > /tmp/cc.pping.version2")
-    if filecmp.cmp("/tmp/cc.pping.version2", "gold/version.txt"):
-        test.print_pass("version")
-    else:
-        test.print_fail("version")
+    # Test common flags
+    test_common("pping")
 
 
     # Test normal call
@@ -236,32 +236,8 @@ def test_pping():
 def test_ppower():
     # pylint: disable=too-many-branches
 
-    # Test help
-    os.system("../bin/ppower -h > /tmp/cc.ppower.help1")
-    if filecmp.cmp("/tmp/cc.ppower.help1", "gold/ppower_help.txt"):
-        test.print_pass("help")
-    else:
-        test.print_fail("help")
-
-    os.system("../bin/ppower --help > /tmp/cc.ppower.help2")
-    if filecmp.cmp("/tmp/cc.ppower.help2", "gold/ppower_help.txt"):
-        test.print_pass("help")
-    else:
-        test.print_fail("help")
-
-
-    # Test version
-    os.system("../bin/ppower -v > /tmp/cc.ppower.version1")
-    if filecmp.cmp("/tmp/cc.ppower.version1", "gold/version.txt"):
-        test.print_pass("version")
-    else:
-        test.print_fail("version")
-
-    os.system("../bin/ppower --version > /tmp/cc.ppower.version2")
-    if filecmp.cmp("/tmp/cc.ppower.version2", "gold/version.txt"):
-        test.print_pass("version")
-    else:
-        test.print_fail("version")
+    # Test common flags
+    test_common("ppower")
 
 
     # Test normal call
@@ -298,6 +274,9 @@ if __name__ == "__main__":
 
     print("----- test_pcmd -----")
     test_pcmd()
+    print(" ")
+    print("----- test_psudo -----")
+    test_psudo()
     print(" ")
     print("----- test_pipmi -----")
     test_pipmi()

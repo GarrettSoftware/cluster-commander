@@ -1,0 +1,41 @@
+# pylint: disable=no-member
+import sys
+import test
+
+sys.path.append("../src")
+import psudo # pylint: disable=import-error,wrong-import-position
+import util  # pylint: disable=import-error,wrong-import-position
+
+
+################################################################################
+def test_psudo():
+
+    args = {"extra" : "hostname"}
+    psudo.psudo("cn001", args, "password")
+    cmd = util.get_and_reset_print_buffer()
+    cmd_gold = "ssh -o LogLevel=ERROR cn001 'sudo -S hostname'\n"
+    if cmd == cmd_gold:
+        test.print_pass()
+    else:
+        test.print_fail()
+
+
+################################################################################
+def test_main():
+
+    psudo.main(["psudo", "cn001", "hostname"])
+    cmd = util.get_and_reset_print_buffer()
+    cmd_gold = "ssh -o LogLevel=ERROR cn001 'sudo -S hostname'\n"
+    if cmd == cmd_gold:
+        test.print_pass()
+    else:
+        test.print_fail()
+
+
+################################################################################
+if __name__ == "__main__":
+    util.set_testing()
+    util.reset_print_buffer()
+
+    test_main()
+    test_psudo()

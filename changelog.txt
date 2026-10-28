@@ -9,3 +9,6 @@ Vers  	Dev     	Changes
                     - Show stderr by default if it isn't blank.
                     - Fix alias file not accepting a comma delimited list.
                     - Print nodes that don't finish from Ctrl+C.
+
+1.4.0   K Garrett   - Add psudo.
+					- Add --root and --alias flags.

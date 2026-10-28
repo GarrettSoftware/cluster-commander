@@ -16,7 +16,7 @@ import util
 #                  as one string.
 ################################################################################
 def parse(argv, description, description2=""):
-    # pylint: disable=too-many-branches
+    # pylint: disable=too-many-branches,too-many-statements
 
     # Default arguments meant for interactive session
     # extra is the parameters after the nodelist/exnodelist
@@ -44,6 +44,12 @@ def parse(argv, description, description2=""):
         if state == "dashes":
             if arg in ('-v', '--version'):
                 print_version()
+                sys.exit(0)
+            elif arg.startswith('--root'):
+                print_root_dir()
+                sys.exit(0)
+            elif arg.startswith('--alias'):
+                print_aliases()
                 sys.exit(0)
             elif arg in ('-h', '--help'):
                 print_help(description, description2)
@@ -117,6 +123,8 @@ def print_help(description, description2):
     util.print("    -d,   --debug             Print command run by this program")
     util.print("    --nc, --no-color          Do not print in color")
     util.print("    -t,   --timeout=TIMEOUT   Set timeout in seconds (default: None)")
+    util.print("    --root                    Print root directory of application")
+    util.print("    --alias                   Print the etc/alias.txt file")
     util.print("")
     util.print("  NODELIST:")
     util.print("    Comma separated list of nodes, node ranges, and aliases.")
@@ -152,3 +160,17 @@ def print_version():
     with open(f"{path}/version.txt", "r") as fil:
         version = fil.read().strip()
     util.print(f"  Cluster Commander: Version {version}")
+
+
+################################################################################
+def print_root_dir():
+    path = util.get_root_dir()
+    util.print(path)
+
+
+################################################################################
+def print_aliases():
+    path = util.get_root_dir()
+    with open(f"{path}/etc/alias.txt", "r") as fil:
+        aliases = fil.read()
+    util.print(aliases)
