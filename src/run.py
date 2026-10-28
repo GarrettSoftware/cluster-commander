@@ -58,6 +58,8 @@ def print_output(node, out, args):
         out1 += f"{debug_node_string}:  CMD: {cmd}  CODE: {code}\n"
     if stderr != "":
         for line in stderr.split("\n"):
+            if line.startswith("[sudo] password for"):
+                continue
             out1 += f"{err_node_string}: {line}\n"
     if stdout == "" and stderr == "":
         out1 += f"{node_string}: <no output>\n"

@@ -47,6 +47,12 @@ def test_pylint():
     else:
         test.print_fail("test_pcmd.py")
 
+    (out, _, _, _) = run.run_cmd("pylint src/test_psudo.py", timeout=10)
+    if success_string in out:
+        test.print_pass("test_psudo.py")
+    else:
+        test.print_fail("test_psudo.py")
+
     (out, _, _, _) = run.run_cmd("pylint src/test_pipmi.py", timeout=10)
     if success_string in out:
         test.print_pass("test_pipmi.py")
@@ -118,6 +124,12 @@ def test_pylint():
         test.print_pass("pcmd.py")
     else:
         test.print_fail("pcmd.py")
+
+    (out, _, _, _) = run.run_cmd("pylint ../src/psudo.py", timeout=10)
+    if success_string in out:
+        test.print_pass("psudo.py")
+    else:
+        test.print_fail("psudo.py")
 
     (out, _, _, _) = run.run_cmd("pylint ../src/pipmi.py", timeout=10)
     if success_string in out:

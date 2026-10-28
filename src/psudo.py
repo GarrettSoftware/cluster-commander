@@ -1,8 +1,8 @@
 import sys
+import getpass
 import run
 import args
 import util
-import getpass
 
 
 ################################################################################
@@ -21,7 +21,7 @@ def psudo(node, arglist, sudo_password):
 def main(argv):
 
     desc = "Usage: psudo [OPTIONS] NODELIST [-EXNODELIST] COMMAND\n" + \
-        "Run a command in parallel across several nodes using ssh"
+        "Run sudo on a command in parallel across several nodes using ssh"
     desc2 = "COMMAND:\n" + \
         "  The command to run across each node"
 
@@ -29,7 +29,7 @@ def main(argv):
     arglist = args.parse(argv, desc, desc2)
     sudo_password = getpass.getpass("Enter sudo password: ")
     run.run_in_parallel(
-        arglist["nodelist"], arglist["exnodelist"], psudo, 
+        arglist["nodelist"], arglist["exnodelist"], psudo,
         (arglist, sudo_password,))
 
 

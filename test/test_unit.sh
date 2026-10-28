@@ -12,6 +12,7 @@ if [[ $# == 0 ]]; then
     run_test test_ipmi.py
     run_test test_parse.py
     run_test test_pcmd.py
+    run_test test_psudo.py
     run_test test_pipmi.py
     run_test test_pping.py
     run_test test_ppower.py
@@ -29,6 +30,8 @@ elif [[ $1 == "parse" ]]; then
     run_test test_parse.py
 elif [[ $1 == "pcmd" ]]; then
     run_test test_pcmd.py
+elif [[ $1 == "psudo" ]]; then
+    run_test test_psudo.py
 elif [[ $1 == "pipmi" ]]; then
     run_test test_pipmi.py
 elif [[ $1 == "pping" ]]; then

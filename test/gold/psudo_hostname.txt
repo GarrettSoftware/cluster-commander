@@ -1,0 +1,2 @@
+[1;32m[hpcdev][0m: hpcdev.hpc.bell
+[1;32m[hpcnet][0m: hpcnet.hpc.bell

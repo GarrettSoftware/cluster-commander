@@ -11,3 +11,4 @@ Vers  	Dev     	Changes
                     - Print nodes that don't finish from Ctrl+C.
 
 1.4.0   K Garrett   - Add psudo.
+					- Add --root and --alias flags.

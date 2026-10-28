@@ -150,6 +150,32 @@ def test_parse():
         else:
             test.print_fail("version")
 
+    # Check --root flag
+    util.reset_print_buffer()
+    try:
+        argv = ["command", "--root"]
+        arg = args.parse(argv, desc1, desc2)
+        test.print_fail("root")
+    except SystemExit as exc:
+        util.get_and_reset_print_buffer().strip()
+        if exc.code == 0:
+            test.print_pass("root")
+        else:
+            test.print_fail("root")
+
+    # Check --alias flag
+    util.reset_print_buffer()
+    try:
+        argv = ["command", "--alias"]
+        arg = args.parse(argv, desc1, desc2)
+        test.print_fail("alias")
+    except SystemExit as exc:
+        util.get_and_reset_print_buffer().strip()
+        if exc.code == 0:
+            test.print_pass("alias")
+        else:
+            test.print_fail("alias")
+
     # Check -h flag
     util.reset_print_buffer()
     try:
@@ -179,16 +205,17 @@ def test_parse():
 
 ########################################################################
 def test_print_version():
+    test.print_no_test("Tested with test_bin.sh")
 
-    util.reset_print_buffer()
-    args.print_version()
-    version = util.get_and_reset_print_buffer()
-    version_gold = "  Cluster Commander: Version 1.3.0\n"
 
-    if version == version_gold:
-        test.print_pass()
-    else:
-        test.print_fail()
+########################################################################
+def test_print_root_dir():
+    test.print_no_test("Tested with test_bin.sh")
+
+
+########################################################################
+def test_print_aliases():
+    test.print_no_test("Tested with test_bin.sh")
 
 
 ########################################################################
@@ -275,6 +302,8 @@ if __name__ == "__main__":
     util.set_testing()
 
     test_parse()
-    test_print_version()
-    test_print_help()
     test_parse_timeout()
+    test_print_help()
+    test_print_version()
+    test_print_root_dir()
+    test_print_aliases()
